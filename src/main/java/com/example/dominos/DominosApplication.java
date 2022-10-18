@@ -11,7 +11,6 @@ public class DominosApplication {
     public static void main(String[] args) {
         SpringApplication.run(DominosApplication.class, args);
     }
-
     @Bean
     public ModelMapper modelMapper(){
         return new ModelMapper();

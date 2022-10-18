@@ -3,6 +3,7 @@ package com.example.dominos.model.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,9 +19,15 @@ public class User {
     private String lastName;
     @Column
     private String email;
-    @Column
+    @Column //todo change column name in db
     private String password;
     @Column
     private String phone;
+
+    //todo make this sets?
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+    @OneToMany(mappedBy = "user")
+    private List<Address> addresses;
 
 }
