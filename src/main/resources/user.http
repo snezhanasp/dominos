@@ -8,8 +8,8 @@ POST http://localhost:8888/auth
 Content-Type: application/json
 
 {
-  "email" : "test@abv.bg",
-  "password" : "test123!"
+  "email" : "test2@abv.bg",
+  "password" : "tesS123!"
 }
 
 ### register
@@ -20,9 +20,9 @@ Content-Type: application/json
 {
   "first_name" : "test",
   "last_name" : "test",
-  "email" : "test@abv.bg",
-  "password" : "test123!",
-  "confirm_password" : "test123!",
+  "email" : "test4@abv.bg",
+  "password" : "tesS123!",
+  "confirm_password" : "tesS123!",
   "phone" : "123456789"
 }
 
@@ -34,14 +34,14 @@ Content-Type: application/json
 {
   "first_name" : "test2",
   "last_name" : "test2",
-  "email" : "test2@abv.bg",
-  "password" : "test2123!",
-  "confirm_password" : "test2123!"
+  "email" : "test3@abv.bg",
+  "password" : "tesT2123!",
+  "confirm_password" : "tesT2123!"
 }
 
 ### edit profile
 
-PUT http://localhost:8888/users/1
+PUT http://localhost:8888/users
 Content-Type: application/json
 
 {
@@ -56,8 +56,19 @@ PUT http://localhost:8888/users/pass
 Content-Type: application/json
 
 {
-  "current_password" : "test123!",
-  "new_password" : "test1234!",
-  "confirm_password" : "test1234!"
+  "password" : "tesT123!",
+  "new_password" : "Test1234!",
+  "confirm_password" : "Test1234!"
 }
 
+### delete profile
+
+DELETE http://localhost:8888/users
+Content-Type: application/json
+
+{
+  "email" : "test3@abv.bg",
+  "password" : "tesT2123!"
+}
+
+### log out
