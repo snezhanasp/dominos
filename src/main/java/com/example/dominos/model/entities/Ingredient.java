@@ -13,21 +13,17 @@ public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private IngredientType ingredientType;
 
     //todo set
-    @ManyToMany
-    @JoinTable(
-            name = "items_have_ingredients",
-            joinColumns = @JoinColumn(name = "ingredient_id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id")
-    )
+    @ManyToMany(mappedBy = "ingredients")
     private List<Item> items;
 
-    @ManyToMany
-    @JoinTable(
-            name = "ordered_items_have_ingredients",
-            joinColumns = @JoinColumn(name = "ingredient_id"),
-            inverseJoinColumns = @JoinColumn(name = "ordered_item_id")
-    )
+    @ManyToMany(mappedBy = "ingredients")
     private List<OrderedItem> orderedItems;
 }

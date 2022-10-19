@@ -8,7 +8,7 @@ POST http://localhost:8888/auth
 Content-Type: application/json
 
 {
-  "email" : "test2@abv.bg",
+  "email" : "test4@abv.bg",
   "password" : "tesS123!"
 }
 
@@ -42,12 +42,12 @@ Content-Type: application/json
 ### edit profile
 
 PUT http://localhost:8888/users
-Content-Type: application/json
 
 {
   "first_name" : "test3",
   "last_name" : "test3",
   "phone" : "123456789"
+
 }
 
 ### change password

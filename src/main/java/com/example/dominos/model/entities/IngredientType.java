@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.lang.reflect.Type;
+import java.util.List;
 
 @Data
 @Entity(name = "ingredient_types") //todo refactor table name in DB
@@ -14,4 +15,9 @@ public class IngredientType {
     private long id;
     @Column
     private String name;
+    @Column
+    private double price;
+
+    @OneToMany(mappedBy = "ingredientType")
+    private List<Ingredient> ingredients;
 }

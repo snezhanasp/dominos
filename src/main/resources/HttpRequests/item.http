@@ -1,0 +1,7 @@
+### get by id
+
+GET http://localhost:8888/menu/item/1
+
+### get all ingredients if available
+
+GET http://localhost:8888/menu/item/ingredients

@@ -16,7 +16,7 @@ public class Item {
     @Column
     private String name;
     @Column
-    private String price;
+    private double price;
     @Column(name = "picture_url")
     private String pictureURL;
 
@@ -33,7 +33,7 @@ public class Item {
             joinColumns = @JoinColumn(name = "item_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
-    private List<Ingredient> items;
+    private List<Ingredient> ingredients;
 
 
 }

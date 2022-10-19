@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@Entity(name = "category")
+@Entity(name = "categories")
 public class Category {
 
     @Id

@@ -52,6 +52,7 @@ public class UserController extends AbstractController{
 
     @PutMapping("/users")
     public UserWithoutPassDTO edit(@RequestBody EditProfileDTO editProfileDTO, HttpSession session){
+        //check session?
         if (session.getAttribute("LOGGED").equals(true)){
             return userService.edit((Long) session.getAttribute("USER_ID"), editProfileDTO);
         }
