@@ -1,7 +1,6 @@
 package com.example.dominos.controller;
 
 import com.example.dominos.model.dto.user.*;
-import com.example.dominos.model.entities.User;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.UnauthorizedException;
 import com.example.dominos.service.UserService;

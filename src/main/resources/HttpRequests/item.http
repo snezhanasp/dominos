@@ -1,7 +1,21 @@
-### get by id
+### get by id - pizza
 
-GET http://localhost:8888/menu/item/1
+GET http://localhost:8888/menu/items/1
 
-### get all ingredients if available
+###get by id - drink
 
-GET http://localhost:8888/menu/item/ingredients
+GET http://localhost:8888/menu/items/2
+
+### get all ingredients for pizza
+
+GET http://localhost:8888/menu/items/1/ingredients
+
+### get all ingredients for drink -- like this?
+
+GET http://localhost:8888/menu/items/2/ingredients
+
+### get all items for category
+
+GET http://localhost:8888/menu/categories/1
+
+###

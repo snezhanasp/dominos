@@ -27,7 +27,7 @@ public class Item {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToMany //todo set
+    @ManyToMany // todo set
     @JoinTable(
             name = "items_have_ingredients",
             joinColumns = @JoinColumn(name = "item_id"),
