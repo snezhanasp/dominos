@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity(name = "ordered_items")
@@ -27,5 +28,8 @@ public class OrderedItem {
             inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
     private List<Ingredient> ingredients;
+
+    @OneToMany(mappedBy = "orderedItem")
+    private Set<OrderedItemQuantity> quantities;
 
 }
