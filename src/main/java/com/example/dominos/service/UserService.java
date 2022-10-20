@@ -1,26 +1,20 @@
 package com.example.dominos.service;
 
+import com.example.dominos.model.dto.address.AddressWithoutUserDTO;
 import com.example.dominos.model.dto.user.*;
 import com.example.dominos.model.entities.User;
 import com.example.dominos.model.exceptions.BadRequestException;
-import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.exceptions.UnauthorizedException;
-import com.example.dominos.model.repositories.UserRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class UserService {
-
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+public class UserService extends AbstractService{
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -28,7 +22,7 @@ public class UserService {
         //validate email and password
         String email = loginDto.getEmail();
         String password = loginDto.getPassword();
-        if (!validateEmail(email) || !validatePassword(password)){
+        if (!emailIsValid(email) || !passwordIsValid(password)){
             throw new BadRequestException("Wrong credentials!");
         }
 
@@ -43,39 +37,37 @@ public class UserService {
         throw new UnauthorizedException("Wrong credentials!");
     }
 
-    private boolean validatePassword(String password) {
-        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–\\[{}\\]:;',?/*~$^+=<>]).{8,20}$";
-        //1 digit, 1 lowercase letter, 1 uppercase letter, 1 special character, 8-20 characters
-        return password.matches(regex);
-    }
-
-    private boolean validateEmail(String email) {
-        String regex = "^[a-zA-Z0-9_+&*\\-]+(?:\\.[a-zA-Z0-9_+&*\\-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        return email.matches(regex);
-    }
-
     public UserWithoutPassDTO getById(long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()){
-            return modelMapper.map(user.get(),UserWithoutPassDTO.class);
-        } else {
-            throw new NotFoundException("User not found");
-        }
+        User user = getUserById(id);
+        UserWithoutPassDTO dto = modelMapper.map(user,UserWithoutPassDTO.class);
+        dto.setAddresses(user.getAddresses().stream().map(a -> modelMapper.map(a, AddressWithoutUserDTO.class)).collect(Collectors.toList()));
+        return modelMapper.map(user,UserWithoutPassDTO.class);
     }
 
     public UserWithoutPassDTO register(RegisterDTO registerDTO) {
         //validate data
         validateRegisterData(registerDTO);
         //check if user with email exists
-        Optional<User> user = userRepository.findByEmail(registerDTO.getEmail());
-        if (user.isPresent()){
+        if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()){
             throw new BadRequestException("Email already registered!");
         }
         //create new user
         User newUser = modelMapper.map(registerDTO, User.class);
         newUser.setPassword(bCryptPasswordEncoder.encode(registerDTO.getPassword()));
+        //save in db
         userRepository.save(newUser);
         return modelMapper.map(newUser,UserWithoutPassDTO.class);
+    }
+
+    private boolean passwordIsValid(String password) {
+        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–\\[{}\\]:;',?/*~$^+=<>]).{8,20}$";
+        //1 digit, 1 lowercase letter, 1 uppercase letter, 1 special character, 8-20 characters
+        return password.matches(regex);
+    }
+
+    private boolean emailIsValid(String email) {
+        String regex = "^[a-zA-Z0-9_+&*\\-]+(?:\\.[a-zA-Z0-9_+&*\\-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(regex);
     }
 
     private void validateRegisterData(RegisterDTO registerDTO) {
@@ -87,10 +79,10 @@ public class UserService {
         if (registerDTO.getLastName().length() <= 1){
             throw new BadRequestException("Last name is too short");
         }
-        if (!validateEmail(registerDTO.getEmail())){
+        if (!emailIsValid(registerDTO.getEmail())){
             throw new BadRequestException("Email not valid!");
         }
-        if (!validatePassword(password)){
+        if (!passwordIsValid(password)){
             throw new BadRequestException("Password not valid!");
         }
         if (!password.equals(confirmPassword)){
@@ -99,16 +91,12 @@ public class UserService {
     }
 
     public UserWithoutPassDTO edit(long id, EditProfileDTO editProfileDTO) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()){
-            User user = optionalUser.get();
-            user.setFirstName(editProfileDTO.getFirstName());
-            user.setLastName(editProfileDTO.getLastName());
-            user.setPhone(editProfileDTO.getPhone());
-            userRepository.save(user);
-            return modelMapper.map(user, UserWithoutPassDTO.class);
-        }
-        throw new NotFoundException("No user with id " + id);
+        User user = getUserById(id);
+        user.setFirstName(editProfileDTO.getFirstName());
+        user.setLastName(editProfileDTO.getLastName());
+        user.setPhone(editProfileDTO.getPhone());
+        userRepository.save(user);
+        return modelMapper.map(user, UserWithoutPassDTO.class);
     }
 
     public UserWithoutPassDTO changePassword(long id, ChangePassDTO changePassDTO) {
@@ -116,50 +104,44 @@ public class UserService {
         String newPassword = changePassDTO.getNewPassword();
         String confirmPassword = changePassDTO.getConfirmPassword();
         //validate data
-        if (!validatePassword(password)){
+        if (!passwordIsValid(password)){
             throw new BadRequestException("Wrong password!");
         }
         if (!newPassword.equals(confirmPassword)){
             throw new BadRequestException("Passwords do not match!");
         }
-        if (!validatePassword(newPassword)){
+        if (!passwordIsValid(newPassword)){
             throw new BadRequestException("New password is not valid!");
         }
         //check if user id exists
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()){
-            User user = optionalUser.get();
-            //check if current password matches
-            if (bCryptPasswordEncoder.matches(password,user.getPassword())){
-                user.setPassword(bCryptPasswordEncoder.encode(newPassword));
-                userRepository.save(user);
-                return modelMapper.map(user, UserWithoutPassDTO.class);
-            }
+        User user = getUserById(id);
+        //check if entered password matches the current one
+        if (!bCryptPasswordEncoder.matches(password,user.getPassword())){
             throw new UnauthorizedException("Wrong credentials!");
         }
-        throw new NotFoundException("No user with id " + id);
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return modelMapper.map(user, UserWithoutPassDTO.class);
     }
 
-    public void delete(long id, LoginDTO dto) {
+    public boolean delete(long id, LoginDTO dto) {
         //validate email and password
         String email = dto.getEmail();
         String password = dto.getPassword();
-        if (!validateEmail(email) || !validatePassword(password)){
+        if (!emailIsValid(email) || !passwordIsValid(password)){
             throw new BadRequestException("Wrong credentials!");
         }
         //check if user id exists
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()){
-            User user = optionalUser.get();
-            if (bCryptPasswordEncoder.matches(dto.getPassword(), user.getPassword())) {
-                user.setFirstName("deleted at " + LocalDateTime.now());
-                user.setLastName("deleted at " + LocalDateTime.now());
-                user.setEmail("deleted at " + LocalDateTime.now());
-                user.setPhone("deleted at " + LocalDateTime.now());
-                userRepository.save(user);
-            }
-        } else {
-            throw new NotFoundException("No user with id " + id);
+        User user = getUserById(id);
+        //check if password matches
+        if (!bCryptPasswordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new UnauthorizedException("Wrong credentials!");
         }
+        user.setFirstName("deleted at " + LocalDateTime.now());
+        user.setLastName("deleted at " + LocalDateTime.now());
+        user.setEmail("deleted at " + LocalDateTime.now());
+        user.setPhone("deleted at " + LocalDateTime.now());
+        userRepository.save(user);
+        return true;
     }
 }

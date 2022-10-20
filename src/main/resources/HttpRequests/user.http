@@ -8,7 +8,7 @@ POST http://localhost:8888/auth
 Content-Type: application/json
 
 {
-  "email" : "test4@abv.bg",
+  "email" : "test@abv.bg",
   "password" : "tesS123!"
 }
 
@@ -20,7 +20,7 @@ Content-Type: application/json
 {
   "first_name" : "test",
   "last_name" : "test",
-  "email" : "test4@abv.bg",
+  "email" : "test@abv.bg",
   "password" : "tesS123!",
   "confirm_password" : "tesS123!",
   "phone" : "123456789"
@@ -71,4 +71,17 @@ Content-Type: application/json
   "password" : "tesT2123!"
 }
 
-### log out
+### get by id
+
+GET http://localhost:8888/addresses/1
+
+### add new address
+
+POST http://localhost:8888/addresses
+Content-Type: application/json
+
+{
+  "city" : "Sofia",
+  "street" : "Street",
+  "street_number" : "8"
+}

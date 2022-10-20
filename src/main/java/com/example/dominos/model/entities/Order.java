@@ -1,11 +1,17 @@
 package com.example.dominos.model.entities;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
 @Entity
 @Table(name="orders")
 public class Order {
@@ -31,4 +37,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "payment_id")
     private PaymentMethod payment;
+
+    @OneToMany(mappedBy = "order")
+    private Set<OrderedItemQuantity> quantities;
 }

@@ -6,9 +6,7 @@ import com.example.dominos.model.entities.Item;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.repositories.DoughRepository;
-import com.example.dominos.model.repositories.ItemRepository;
 import com.example.dominos.model.repositories.SizeRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,21 +14,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PizzaSpecificationService {
+public class PizzaSpecificationService extends AbstractService{
     @Autowired
     SizeRepository sizeRepository;
     @Autowired
     DoughRepository doughRepository;
-    @Autowired
-    ItemRepository itemRepository;
-    @Autowired
-    ModelMapper modelMapper;
+
     public List<SizeResponseDTO> getAllSizesForItem(long id) {
-        Optional<Item> item = itemRepository.findById(id);
-        if (!item.isPresent()) {
-            throw new NotFoundException("Item not found");
-        }
-        String category = item.get().getCategory().getName();
+        Item item = getItemById(id);
+        String category = item.getCategory().getName();
         if (!category.equals("pizza")) { //etc
             throw new BadRequestException("No sizes available for this item");
         }
@@ -39,11 +31,8 @@ public class PizzaSpecificationService {
     }
 
     public List<DoughResponseDTO> getAllDoughTypesForItem(long id) {
-        Optional<Item> item = itemRepository.findById(id);
-        if (!item.isPresent()) {
-            throw new NotFoundException("Item not found");
-        }
-        String category = item.get().getCategory().getName();
+        Item item = getItemById(id);
+        String category = item.getCategory().getName();
         if (!category.equals("pizza")) { //etc
             throw new BadRequestException("No dough types available for this item");
         }

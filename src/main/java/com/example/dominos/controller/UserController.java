@@ -2,33 +2,26 @@ package com.example.dominos.controller;
 
 import com.example.dominos.model.dto.user.*;
 import com.example.dominos.model.exceptions.BadRequestException;
-import com.example.dominos.model.exceptions.UnauthorizedException;
 import com.example.dominos.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RestController
 public class UserController extends AbstractController{
-
     @Autowired
     private UserService userService;
-    @Autowired
-    private ModelMapper modelMapper;
 
     @PostMapping("/auth")
-    public UserWithoutPassDTO login(@RequestBody LoginDTO loginDto, HttpSession session){
+    public UserWithoutPassDTO login(@RequestBody LoginDTO loginDto, HttpServletRequest request){
         //TODO check if already logged
         UserWithoutPassDTO result = userService.login(loginDto);
 
         if (result != null){
-            //change state
-            session.setAttribute("LOGGED",true);
-            session.setAttribute("USER_ID",result.getId());
-            //return user data
+            logUser(request,result.getId());
             return result;
         } else {
             throw new BadRequestException("Wrong credentials!");
@@ -42,45 +35,35 @@ public class UserController extends AbstractController{
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserWithoutPassDTO register(@RequestBody RegisterDTO registerDTO, HttpSession session){
+    public UserWithoutPassDTO register(@RequestBody RegisterDTO registerDTO, HttpServletRequest request){
         UserWithoutPassDTO dto = userService.register(registerDTO);
-        session.setAttribute("LOGGED",true);
-        session.setAttribute("USER_ID",dto.getId());
+        logUser(request, dto.getId());
         return dto;
     }
 
     @PutMapping("/users")
-    public UserWithoutPassDTO edit(@RequestBody EditProfileDTO editProfileDTO, HttpSession session){
-        //check session?
-        if (session.getAttribute("LOGGED").equals(true)){
-            return userService.edit((Long) session.getAttribute("USER_ID"), editProfileDTO);
-        }
-        throw new UnauthorizedException("User not logged!");
+    public UserWithoutPassDTO edit(@RequestBody EditProfileDTO editProfileDTO, HttpServletRequest request){
+        return userService.edit(getLoggedUserId(request), editProfileDTO);
     }
 
     @PutMapping("/users/pass")
-    public UserWithoutPassDTO changePassword(@RequestBody ChangePassDTO changePassDTO, HttpSession session){
-        if (session.getAttribute("LOGGED").equals(true)){
-            return userService.changePassword((long) session.getAttribute("USER_ID"), changePassDTO);
-        }
-        throw new UnauthorizedException("User not logged!");
+    public UserWithoutPassDTO changePassword(@RequestBody ChangePassDTO changePassDTO, HttpServletRequest request){
+        return userService.changePassword(getLoggedUserId(request), changePassDTO);
     }
 
-    @PostMapping("/users/logout")
-    public void logout(HttpSession session){
-        if (session.getAttribute("LOGGED").equals(true)){
-            session.invalidate();
-        }
-        throw new UnauthorizedException("User not logged!");
+    @PostMapping("/logout")
+    public boolean logout(HttpServletRequest request){
+        //check if logged
+        getLoggedUserId(request);
+        //invalidate session
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return true;
     }
 
     @DeleteMapping("/users")
-    public void delete(@RequestBody LoginDTO dto, HttpSession session){
-        if (session.getAttribute("LOGGED").equals(true)){
-            userService.delete((long) session.getAttribute("USER_ID"), dto);
-            return;
-        }
-        throw new UnauthorizedException("User not logged!");
+    public boolean delete(@RequestBody LoginDTO dto, HttpServletRequest request){
+        return userService.delete(getLoggedUserId(request), dto);
     }
 
 }
