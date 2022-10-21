@@ -22,6 +22,14 @@ public class AddressController extends AbstractController{
         return addressService.getById(aid);
     }
 
+    @PostMapping("/addresses/{aid}")
+    public void selectAddress(@PathVariable long aid, HttpServletRequest request){
+        //check if logged
+        getLoggedUserId(request);
+        //save in session
+        request.getSession().setAttribute(ADDRESS_ID,aid);
+    }
+
     @GetMapping("/addresses")
     public List<AddressWithoutUserDTO> getAllAddressesByUserId(HttpServletRequest request){
         return addressService.getAllByUserId(getLoggedUserId(request));

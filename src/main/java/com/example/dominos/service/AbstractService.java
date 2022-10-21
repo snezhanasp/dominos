@@ -1,9 +1,6 @@
 package com.example.dominos.service;
 
-import com.example.dominos.model.entities.Address;
-import com.example.dominos.model.entities.Category;
-import com.example.dominos.model.entities.Item;
-import com.example.dominos.model.entities.User;
+import com.example.dominos.model.entities.*;
 import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.repositories.*;
 import org.modelmapper.ModelMapper;
@@ -24,6 +21,18 @@ public abstract class AbstractService {
     @Autowired
     protected AddressRepository addressRepository;
     @Autowired
+    protected OrderedItemRepository orderedItemRepository;
+    @Autowired
+    protected OrderRepository orderRepository;
+    @Autowired
+    protected StatusRepository statusRepository;
+    @Autowired
+    protected PaymentMethodRepository paymentMethodRepository;
+    @Autowired
+    protected OrderItemQuantityRepository orderItemQuantityRepository;
+    @Autowired
+    protected PizzaSpecificationRepository pizzaSpecificationRepository;
+    @Autowired
     protected ModelMapper modelMapper;
 
     protected User getUserById(long id){
@@ -36,6 +45,18 @@ public abstract class AbstractService {
 
     protected Address getAddressById(long id){
         return addressRepository.findById(id).orElseThrow(() -> new NotFoundException("Address not found!"));
+    }
+
+    protected Status getStatusById(long id){
+        return statusRepository.findById(id).orElseThrow(() -> new NotFoundException("Order status not found!"));
+    }
+
+    protected PaymentMethod getPaymentMethodById(long id){
+        return paymentMethodRepository.findById(id).orElseThrow(() -> new NotFoundException("Payment method not found!"));
+    }
+
+    protected PizzaSpecification getPizzaSpecById(long id){
+        return pizzaSpecificationRepository.findById(id).orElseThrow(() -> new NotFoundException("Pizza specification not found!"));
     }
 
 }

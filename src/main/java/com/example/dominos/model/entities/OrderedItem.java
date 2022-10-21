@@ -30,6 +30,6 @@ public class OrderedItem {
     private List<Ingredient> ingredients;
 
     @OneToMany(mappedBy = "orderedItem")
-    private Set<OrderedItemQuantity> quantities;
+    private Set<OrderItemQuantity> ordersAndQuantities;
 
 }

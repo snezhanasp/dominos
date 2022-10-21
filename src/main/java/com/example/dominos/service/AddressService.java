@@ -20,8 +20,6 @@ public class AddressService extends AbstractService{
     }
 
     public AddressWithoutUserDTO addNewAddress(NewAddressDTO newAddressDTO, long uid) {
-        //validate data
-        validateAddress(newAddressDTO);
         //check if user exists in db
         User user = getUserById(uid);
         //create new address
@@ -32,10 +30,6 @@ public class AddressService extends AbstractService{
         return modelMapper.map(address,AddressWithoutUserDTO.class);
     }
 
-    private void validateAddress(NewAddressDTO newAddressDTO) {
-        //TODO
-    }
-
     public List<AddressWithoutUserDTO> getAllByUserId(long uid) {
         //check if user exists in db
         User user = getUserById(uid);
@@ -43,8 +37,6 @@ public class AddressService extends AbstractService{
     }
 
     public AddressWithoutUserDTO editAddress(AddressWithoutUserDTO dto, long uid) {
-        //validate data
-        validateAddress(modelMapper.map(dto, NewAddressDTO.class));
         //check if user exists in db
         User user = getUserById(uid);
         //edit address

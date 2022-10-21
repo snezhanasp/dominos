@@ -1,6 +1,9 @@
 package com.example.dominos.controller;
 
 import com.example.dominos.model.dto.ErrorDTO;
+import com.example.dominos.model.dto.item.CartItemDTO;
+import com.example.dominos.model.dto.item.ItemInfoDTO;
+import com.example.dominos.model.entities.OrderedItem;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.exceptions.UnauthorizedException;
@@ -11,12 +14,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class AbstractController {
 
     public static final String LOGGED = "LOGGED";
     public static final String USER_ID = "USER_ID";
+    public static final String ADDRESS_ID = "ADDRESS_ID";
     public static final String REMOTE_IP = "REMOTE_IP";
+    public static final String CART = "CART";
     @ExceptionHandler(value = NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorDTO handleNotFound(Exception e){
@@ -55,6 +62,8 @@ public abstract class AbstractController {
         session.setAttribute(LOGGED, true);
         session.setAttribute(USER_ID, id);
         session.setAttribute(REMOTE_IP, req.getRemoteAddr());
+        HashMap<CartItemDTO, Integer> cart = new HashMap<>();
+        session.setAttribute(CART, cart);
     }
 
     public long getLoggedUserId(HttpServletRequest req){

@@ -38,5 +38,5 @@ public class Order {
     private PaymentMethod payment;
 
     @OneToMany(mappedBy = "order")
-    private Set<OrderedItemQuantity> quantities;
+    private Set<OrderItemQuantity> itemsAndQuantities;
 }

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity(name = "orders_have_items")
-public class OrderedItemQuantity {
+public class OrderItemQuantity {
 
     @EmbeddedId
     private OrderOrderedItemKey id;

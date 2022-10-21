@@ -25,7 +25,7 @@ public class ItemController extends AbstractController{
         return  itemService.getItemsForCategory(id);
     }
 
-    @PostMapping("items/{id}/image")
+    @PostMapping("/menu/items/{id}/image")
     public String uploadItemImage(@PathVariable long id, @RequestParam(value = "image") MultipartFile image){
         return itemService.uploadItemImage(id,image);
     }
