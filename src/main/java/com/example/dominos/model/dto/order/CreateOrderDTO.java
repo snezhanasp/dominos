@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 public class CreateOrderDTO {
 
     private double price;
-    private LocalDateTime orderedAt;
-    private long statusId;
     private long paymentMethodId;
+
 }

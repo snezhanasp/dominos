@@ -62,8 +62,6 @@ public abstract class AbstractController {
         session.setAttribute(LOGGED, true);
         session.setAttribute(USER_ID, id);
         session.setAttribute(REMOTE_IP, req.getRemoteAddr());
-        HashMap<CartItemDTO, Integer> cart = new HashMap<>();
-        session.setAttribute(CART, cart);
     }
 
     public long getLoggedUserId(HttpServletRequest req){

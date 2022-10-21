@@ -14,5 +14,5 @@ public class CartItemDTO {
     private List<IngredientWithoutItemsAndTypeDTO> ingredients;
     private long pizzaSpecificationId;
     @EqualsAndHashCode.Exclude
-    private int quantity;// remove quantity
+    private int quantity;
 }

@@ -6,4 +6,5 @@ import lombok.Data;
 public class CategoryWithoutItemsDTO {
     private long id;
     private String name;
+    private boolean isModifiable;
 }

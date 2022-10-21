@@ -14,8 +14,11 @@ public class Category {
     private long id;
     @Column
     private String name;
+    @Column
+    private boolean isModifiable;
 
-    //todo set
+    // todo set
     @OneToMany(mappedBy = "category")
     private List<Item> items;
+
 }

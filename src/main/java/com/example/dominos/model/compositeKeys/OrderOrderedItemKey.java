@@ -1,6 +1,8 @@
 package com.example.dominos.model.compositeKeys;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -15,4 +17,11 @@ public class OrderOrderedItemKey implements Serializable {
 
     @Column(name = "ordered_item_id")
     private long orderedItemId;
+
+    public OrderOrderedItemKey(long orderId, long orderedItemId){
+        this.orderId = orderId;
+        this.orderedItemId = orderedItemId;
+    }
+    public OrderOrderedItemKey() {
+    }
 }

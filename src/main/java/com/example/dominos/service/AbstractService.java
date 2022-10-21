@@ -47,16 +47,16 @@ public abstract class AbstractService {
         return addressRepository.findById(id).orElseThrow(() -> new NotFoundException("Address not found!"));
     }
 
-    protected Status getStatusById(long id){
-        return statusRepository.findById(id).orElseThrow(() -> new NotFoundException("Order status not found!"));
-    }
-
+    //not here
     protected PaymentMethod getPaymentMethodById(long id){
         return paymentMethodRepository.findById(id).orElseThrow(() -> new NotFoundException("Payment method not found!"));
     }
 
-    protected PizzaSpecification getPizzaSpecById(long id){
-        return pizzaSpecificationRepository.findById(id).orElseThrow(() -> new NotFoundException("Pizza specification not found!"));
-    }
+//    protected PizzaSpecification getPizzaSpecById(long id){
+//        return pizzaSpecificationRepository.findById(id).orElseThrow(() -> new NotFoundException("Pizza specification not found!"));
+//    }
+
+    protected Ingredient getIngredientById(long id){
+        return ingredientRepository.findById(id).orElseThrow(() -> new NotFoundException("Ingredient not found"));    }
 
 }

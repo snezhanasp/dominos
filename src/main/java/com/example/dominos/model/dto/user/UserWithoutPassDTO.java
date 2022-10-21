@@ -15,6 +15,6 @@ public class UserWithoutPassDTO {
     private String email;
     private String phone;
     private List<AddressWithoutUserDTO> addresses;
-    private List<Order> orders;
+    //private List<Order> orders;
 
 }
