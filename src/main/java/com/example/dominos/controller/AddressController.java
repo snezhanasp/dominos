@@ -1,14 +1,15 @@
 package com.example.dominos.controller;
 
 import com.example.dominos.model.dto.address.AddressResponseDTO;
+import com.example.dominos.model.dto.address.AddressWithoutUserDTO;
 import com.example.dominos.model.dto.address.NewAddressDTO;
-import com.example.dominos.model.repositories.AddressRepository;
 import com.example.dominos.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 public class AddressController extends AbstractController{
@@ -20,22 +21,25 @@ public class AddressController extends AbstractController{
     public AddressResponseDTO getById(@PathVariable long aid){
         return addressService.getById(aid);
     }
+
+    @GetMapping("/addresses")
+    public List<AddressWithoutUserDTO> getAllAddressesByUserId(HttpServletRequest request){
+        return addressService.getAllByUserId(getLoggedUserId(request));
+    }
     @PostMapping("/addresses")
-    public AddressResponseDTO addNewAddress(@RequestBody NewAddressDTO newAddressDTO, HttpServletRequest request){
-        long uid = getLoggedUserId(request);
-        System.out.println(uid);
-        System.out.println(newAddressDTO);
-        return addressService.addNewAddress(newAddressDTO, uid);
+    @ResponseStatus(HttpStatus.CREATED)
+    public AddressWithoutUserDTO addNewAddress(@RequestBody NewAddressDTO newAddressDTO, HttpServletRequest request){
+        return addressService.addNewAddress(newAddressDTO, getLoggedUserId(request));
     }
 
-    public void editAddress(){
-
+    @PutMapping("/addresses")
+    public AddressWithoutUserDTO editAddress(@RequestBody AddressWithoutUserDTO dto, HttpServletRequest request){
+        return addressService.editAddress(dto, getLoggedUserId(request));
     }
 
-    public void deleteAddress(){
-
+    @DeleteMapping("/addresses/{aid}")
+    public boolean deleteAddress(@PathVariable long aid, HttpServletRequest request){
+        return addressService.deleteAddress(aid, getLoggedUserId(request));
     }
-
-
 
 }

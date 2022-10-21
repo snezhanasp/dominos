@@ -1,12 +1,13 @@
 package com.example.dominos.service;
 
+import com.example.dominos.model.entities.Address;
+import com.example.dominos.model.entities.Category;
 import com.example.dominos.model.entities.Item;
 import com.example.dominos.model.entities.User;
 import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 
 public abstract class AbstractService {
 
@@ -33,5 +34,8 @@ public abstract class AbstractService {
         return itemRepository.findById(id).orElseThrow(() -> new NotFoundException("Item not found"));
     }
 
+    protected Address getAddressById(long id){
+        return addressRepository.findById(id).orElseThrow(() -> new NotFoundException("Address not found!"));
+    }
 
 }
