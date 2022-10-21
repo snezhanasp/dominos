@@ -1,6 +1,5 @@
 package com.example.dominos.model.entities;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

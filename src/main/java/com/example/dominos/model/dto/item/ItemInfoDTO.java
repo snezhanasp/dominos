@@ -13,6 +13,6 @@ public class ItemInfoDTO {
     private String name;
     private double price;
     private CategoryWithoutItemsDTO category;
-    // todo image
+    private String pictureURL;
     private List<IngredientWithoutItemsAndTypeDTO> ingredients;
 }

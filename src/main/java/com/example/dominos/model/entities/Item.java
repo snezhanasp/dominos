@@ -35,5 +35,4 @@ public class Item {
     )
     private List<Ingredient> ingredients;
 
-
 }

@@ -1,5 +1,6 @@
 package com.example.dominos.service;
 
+import com.example.dominos.model.entities.Address;
 import com.example.dominos.model.entities.Category;
 import com.example.dominos.model.entities.Item;
 import com.example.dominos.model.entities.User;
@@ -7,8 +8,6 @@ import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Optional;
 
 public abstract class AbstractService {
 
@@ -36,7 +35,11 @@ public abstract class AbstractService {
     }
 
     protected Category getCategoryById(long id){
-        return categoryRepository.findById(id).orElseThrow(()-> new NotFoundException("Categoru not found"))
+        return categoryRepository.findById(id).orElseThrow(()-> new NotFoundException("Category not found"));
+    }
+
+    protected Address getAddressById(long id){
+        return addressRepository.findById(id).orElseThrow(() -> new NotFoundException("Address not found!"));
     }
 
 }

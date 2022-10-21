@@ -24,7 +24,7 @@ public class User {
     private String lastName;
     @Column
     private String email;
-    @Column //todo change column name in db
+    @Column
     private String password;
     @Column
     private String phone;

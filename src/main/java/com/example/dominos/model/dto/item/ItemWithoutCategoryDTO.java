@@ -10,6 +10,6 @@ public class ItemWithoutCategoryDTO {
     private long id;
     private String name;
     private double price;
-    //todo image
+    private String pictureURL;
     private List<IngredientWithoutItemsAndTypeDTO> ingredients;
 }
