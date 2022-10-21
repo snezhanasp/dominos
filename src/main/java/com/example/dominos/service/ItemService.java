@@ -8,7 +8,6 @@ import com.example.dominos.model.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ItemService extends AbstractService{
@@ -20,9 +19,11 @@ public class ItemService extends AbstractService{
 
     public List<ItemWithoutCategoryDTO> getItemsForCategory(long id){
         Category category = getCategoryById(id);
-        List<Item> ingredients = itemRepository.findItemsByCategory(category);
-        return ingredients.stream()
+        return itemRepository.findItemsByCategory(category).stream()
                 .map(i -> modelMapper.map(i, ItemWithoutCategoryDTO.class))
                 .toList();
+    }
+    private Category getCategoryById(long id){
+        return categoryRepository.findById(id).orElseThrow(()-> new NotFoundException("Category not found"));
     }
 }

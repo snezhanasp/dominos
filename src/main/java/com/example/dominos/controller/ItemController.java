@@ -1,6 +1,5 @@
 package com.example.dominos.controller;
 
-import com.example.dominos.model.dto.ingredient_types.IngredientTypeResponseDTO;
 import com.example.dominos.model.dto.item.ItemInfoDTO;
 import com.example.dominos.model.dto.item.ItemWithoutCategoryDTO;
 import com.example.dominos.service.ItemService;
@@ -22,7 +21,7 @@ public class ItemController extends AbstractController{
         return itemService.getById(id);
     }
 
-    @GetMapping("/menu/categories/{id}")
+    @GetMapping("/menu/categories/{id}/items")
     public List<ItemWithoutCategoryDTO> getItemsForCategory(@PathVariable long id){
         return  itemService.getItemsForCategory(id);
     }

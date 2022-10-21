@@ -16,6 +16,6 @@ GET http://localhost:8888/menu/items/2/ingredients
 
 ### get all items for category
 
-GET http://localhost:8888/menu/categories/1
+GET http://localhost:8888/menu/categories/1/items
 
 ###
