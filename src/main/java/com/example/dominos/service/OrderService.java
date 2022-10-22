@@ -1,13 +1,14 @@
 package com.example.dominos.service;
 
 import com.example.dominos.model.compositeKeys.OrderOrderedItemKey;
+import com.example.dominos.model.dto.item.CartItemWithQuantityDTO;
 import com.example.dominos.model.dto.order.CreateOrderDTO;
 import com.example.dominos.model.dto.order.OrderResponseDTO;
-import com.example.dominos.model.dto.item.CartItemDTO;
-import com.example.dominos.model.dto.ordered_item.OrderedItemDTO;
+import com.example.dominos.model.dto.ordered_item.OrderItemDTO;
 import com.example.dominos.model.entities.*;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +21,12 @@ public class OrderService extends AbstractService{
     public static final int ACCEPTED = 1;
 
     @Transactional
-    public OrderResponseDTO createOrder(CreateOrderDTO dto, Set<CartItemDTO> cart, long uid, long aid) {
+    public OrderResponseDTO createOrder(CreateOrderDTO dto, Set<CartItemWithQuantityDTO> cart, long uid, long aid) {
 
         //create order and save in order repo
         if(cart.isEmpty()){
             throw new BadRequestException("Cart is empty!");
         }
-        // todo
         double totalPrice = calculatePrice(cart);
         if(totalPrice < 10){
             throw new BadRequestException("Order has to be at least 10lv.");
@@ -34,21 +34,22 @@ public class OrderService extends AbstractService{
 
         Order order = saveOrder(dto, uid, aid);
 
-        Set<CartItemDTO> items = cart;
-        for (CartItemDTO cartItemDTO: cart) {
-            OrderedItem orderedItem = saveItem(cartItemDTO);
+        Set<CartItemWithQuantityDTO> items = cart;
+        for (CartItemWithQuantityDTO cartItemDTO: cart) {
+            OrderedItem orderedItem = saveItem(cartItemDTO.getItem());
             int quantity = cartItemDTO.getQuantity();
             saveOrderOrderedItemRelation(order, orderedItem, quantity);
         }
 
         OrderResponseDTO orderResponseDTO = modelMapper.map(order,OrderResponseDTO.class);
+        orderResponseDTO.setItems(items);
         return orderResponseDTO;
     }
 
-    private double calculatePrice(Set<CartItemDTO> cart) {
+    private double calculatePrice(Set<CartItemWithQuantityDTO> cart) {
         double price = 0;
-        for(CartItemDTO dto : cart){
-            price += getItemById(dto.getItemId()).getPrice();
+        for(CartItemWithQuantityDTO dto : cart){
+            price += (dto.getItem().getPrice()* dto.getQuantity());
         }
         return price;
     }
@@ -66,7 +67,7 @@ public class OrderService extends AbstractService{
         return statusRepository.findById(id).orElseThrow(() -> new NotFoundException("Order status not found!"));
     }
 
-    private OrderedItem saveItem(CartItemDTO dto){
+    private OrderedItem saveItem(OrderItemDTO dto){
         OrderedItem orderedItem = new OrderedItem();
         orderedItem.setItem(getItemById(dto.getItemId()));
         // todo
@@ -88,7 +89,7 @@ public class OrderService extends AbstractService{
         return order;
     }
 
-    private List<Ingredient> extractIngredients(CartItemDTO dto){
+    private List<Ingredient> extractIngredients(OrderItemDTO dto){
         return dto.getIngredients().stream()
                 .map(i -> getIngredientById(i.getId()))
                 .toList();
@@ -98,4 +99,16 @@ public class OrderService extends AbstractService{
                 .orElseThrow(() -> new NotFoundException("Pizza specification not found"));
     }
 
+    public List<OrderResponseDTO> getOrdersForUser(long uid) {
+        User u = getUserById(uid);
+        return u.getOrders().stream().map(o->modelMapper.map(o, OrderResponseDTO.class)).toList();
+    }
+
+    public OrderResponseDTO getOrderById(long oid, Long uid) {
+        Order order = orderRepository.findById(oid).orElseThrow(()-> new BadRequestException("Order not found"));
+        if(order.getUser().getId() != uid){
+            throw new AuthorizationServiceException("User is not owner");
+        }
+        return modelMapper.map(order, OrderResponseDTO.class);
+    }
 }

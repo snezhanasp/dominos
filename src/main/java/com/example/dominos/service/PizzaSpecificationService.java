@@ -1,6 +1,7 @@
 package com.example.dominos.service;
 
 import com.example.dominos.model.dto.pizza_specification.DoughResponseDTO;
+import com.example.dominos.model.dto.pizza_specification.PizzaSpecificationDTO;
 import com.example.dominos.model.dto.pizza_specification.SizeResponseDTO;
 import com.example.dominos.model.repositories.DoughRepository;
 import com.example.dominos.model.repositories.SizeRepository;
@@ -25,5 +26,10 @@ public class PizzaSpecificationService extends AbstractService{
     public List<DoughResponseDTO> getAllDoughTypesForItem() {
         return doughRepository.findAll().stream()
                 .map(i-> modelMapper.map(i, DoughResponseDTO.class)).toList();
+    }
+
+    public List<PizzaSpecificationDTO> getAllPizzaSpecifications() {
+        return pizzaSpecificationRepository.findAll().stream()
+                .map(p -> modelMapper.map(p, PizzaSpecificationDTO.class)).toList();
     }
 }

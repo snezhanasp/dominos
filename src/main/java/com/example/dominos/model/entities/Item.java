@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -27,12 +28,12 @@ public class Item {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToMany // todo set
+    @ManyToMany
     @JoinTable(
             name = "items_have_ingredients",
             joinColumns = @JoinColumn(name = "item_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
-    private List<Ingredient> ingredients;
+    private Set<Ingredient> ingredients;
 
 }

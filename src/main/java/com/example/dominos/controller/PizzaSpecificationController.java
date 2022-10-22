@@ -1,6 +1,7 @@
 package com.example.dominos.controller;
 
 import com.example.dominos.model.dto.pizza_specification.DoughResponseDTO;
+import com.example.dominos.model.dto.pizza_specification.PizzaSpecificationDTO;
 import com.example.dominos.model.dto.pizza_specification.SizeResponseDTO;
 import com.example.dominos.service.PizzaSpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,11 @@ public class PizzaSpecificationController extends AbstractController{
 
     @Autowired
     PizzaSpecificationService pizzaSpecificationService;
+
+    @GetMapping("/items/specifications")
+    public List<PizzaSpecificationDTO> getAvailablePizzaSpecification(){
+        return pizzaSpecificationService.getAllPizzaSpecifications();
+    }
 
     @GetMapping("/items/sizes")
     public List<SizeResponseDTO> getAvailableSizes(){
