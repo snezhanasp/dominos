@@ -2,6 +2,7 @@ package com.example.dominos.controller;
 
 import com.example.dominos.model.dto.cart.CartResponseDTO;
 import com.example.dominos.model.dto.item.CartItemWithQuantityDTO;
+import com.example.dominos.model.dto.item.ItemWithSpecificationAndQuantityDTO;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class CartController extends AbstractController{
     CartService cartService;
 
     @PostMapping("/cart") //to return smth
-    public CartItemWithQuantityDTO addItemToCart(@RequestBody CartItemWithQuantityDTO dto, HttpServletRequest request){
+    public CartResponseDTO addItemToCart(@RequestBody ItemWithSpecificationAndQuantityDTO dto, HttpServletRequest request){
         //check if logged
         getLoggedUserId(request);
         //save in session
@@ -31,10 +32,9 @@ public class CartController extends AbstractController{
         else {
             cart = (Set<CartItemWithQuantityDTO>) session.getAttribute(CART);
         }
-        // todo what to return?
         cart = cartService.addItemToCart(cart, dto);
         session.setAttribute(CART,cart);
-        return dto;
+        return cartService.viewCart(cart);
     }
 
     @GetMapping("/cart/show")
@@ -63,39 +63,5 @@ public class CartController extends AbstractController{
         }
         session.setAttribute(CART, null);
     }
-
-//    @PutMapping("/cart")
-//    public void changeQuantity(@RequestBody CartItemDTO dto, HttpServletRequest request){
-//        //check if logged
-//        getLoggedUserId(request);
-//        //get cart from session
-//        HttpSession session = request.getSession();
-//        Map<CartItemDTO, Integer> cart = (HashMap<CartItemDTO, Integer>) session.getAttribute(CART);
-//        //check if cart contains item
-//        if (cart.containsKey(dto)){
-//            cart.put(dto, dto.getQuantity());
-//        } else {
-//            throw new BadRequestException("No such item in cart!");
-//        }
-//        //save in session
-//        session.setAttribute(CART,cart);
-//    }
-
-//    @DeleteMapping("/cart")
-//    public void deleteItem(@RequestBody CartItemDTO dto, HttpServletRequest request){
-//        //check if logged
-//        getLoggedUserId(request);
-//        //get cart from session
-//        HttpSession session = request.getSession();
-//        Map<CartItemDTO, Integer> cart = (HashMap<CartItemDTO, Integer>) session.getAttribute(CART);
-//        //check if cart contains item
-//        if (cart.containsKey(dto)){
-//            cart.remove(dto);
-//        } else {
-//            throw new BadRequestException("No such item in cart!");
-//        }
-//        //save in session
-//        session.setAttribute(CART,cart);
-//    }
 
 }

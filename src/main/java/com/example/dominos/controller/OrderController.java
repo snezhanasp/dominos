@@ -30,9 +30,9 @@ public class OrderController extends AbstractController{
         Set<CartItemWithQuantityDTO> cart = (HashSet<CartItemWithQuantityDTO>) session.getAttribute(CART);
         long aid = getAddressId(session);
 
-        //empty cart -> shouldn't be here
+        OrderResponseDTO responseDTO = orderService.createOrder(dto, cart, uid, aid);
         session.setAttribute(CART, null);
-        return orderService.createOrder(dto, cart, uid, aid);
+        return responseDTO;
     }
 
     private long getAddressId(HttpSession session){
@@ -54,6 +54,4 @@ public class OrderController extends AbstractController{
         Long uid = getLoggedUserId(request);
         return orderService.getOrderById(oid, uid);
     }
-    //getById
-    //getAllOrders
 }

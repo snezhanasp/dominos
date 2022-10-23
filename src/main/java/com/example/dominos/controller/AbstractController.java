@@ -1,7 +1,6 @@
 package com.example.dominos.controller;
 
 import com.example.dominos.model.dto.ErrorDTO;
-import com.example.dominos.model.dto.item.CartItemDTO;
 import com.example.dominos.model.dto.item.ItemInfoDTO;
 import com.example.dominos.model.entities.OrderedItem;
 import com.example.dominos.model.exceptions.BadRequestException;

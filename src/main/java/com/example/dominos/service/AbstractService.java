@@ -28,6 +28,7 @@ public abstract class AbstractService {
     protected StatusRepository statusRepository;
     @Autowired
     protected PaymentMethodRepository paymentMethodRepository;
+
     @Autowired
     protected OrderItemQuantityRepository orderItemQuantityRepository;
     @Autowired
