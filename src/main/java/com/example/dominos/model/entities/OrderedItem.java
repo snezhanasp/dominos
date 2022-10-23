@@ -10,15 +10,10 @@ import java.util.Set;
 @Entity(name = "ordered_items")
 public class OrderedItem {
 
-    private static int counter = 1; //for the sake of it
-    // todo ask Krasi
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    public OrderedItem(){
-        this.id = counter++;
-    }
     @ManyToOne
     @JoinColumn(name = "item_id")
     private Item item;

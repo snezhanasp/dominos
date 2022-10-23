@@ -55,12 +55,23 @@ public class OrderService extends AbstractService{
     }
 
     private void saveOrderOrderedItemRelation(Order order, OrderedItem orderedItem, int quantity) {
-        OrderOrderedItemKey key = new OrderOrderedItemKey(order.getId(), orderedItem.getId());
+        OrderOrderedItemKey key = new OrderOrderedItemKey();
+
+        key.setOrderId(order.getId());
+        key.setOrderedItemId(orderedItem.getId());
+
         OrderItemQuantity orderItemQuantity = new OrderItemQuantity();
         orderItemQuantity.setId(key);
         orderItemQuantity.setOrder(order);
         orderItemQuantity.setOrderedItem(orderedItem);
         orderItemQuantity.setQuantity(quantity);
+
+        if(order.getItemsAndQuantities() == null){
+            order.setItemsAndQuantities(new HashSet<>());
+        }
+        order.getItemsAndQuantities().add(orderItemQuantity);
+
+        orderItemQuantityRepository.save(orderItemQuantity);
     }
 
     private Status getStatusById(long id){

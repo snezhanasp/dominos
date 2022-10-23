@@ -58,7 +58,7 @@ public class ItemService extends AbstractService{
         }
 
         //save to db
-        item.setPictureURL("...");
+        item.setPictureURL(name);
         itemRepository.save(item);
         return name;
     }
