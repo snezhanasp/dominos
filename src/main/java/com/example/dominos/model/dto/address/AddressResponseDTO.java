@@ -1,6 +1,6 @@
 package com.example.dominos.model.dto.address;
 
-import com.example.dominos.model.dto.user.UserWithoutAddressesDTO;
+import com.example.dominos.model.dto.user.UserWithoutAddressesAndOrdersDTO;
 import lombok.Data;
 
 @Data
@@ -10,5 +10,5 @@ public class AddressResponseDTO {
     private String city;
     private String street;
     private int streetNumber;
-    private UserWithoutAddressesDTO user;
+    private UserWithoutAddressesAndOrdersDTO user;
 }

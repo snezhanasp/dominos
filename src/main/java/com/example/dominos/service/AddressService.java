@@ -3,9 +3,10 @@ package com.example.dominos.service;
 import com.example.dominos.model.dto.address.AddressResponseDTO;
 import com.example.dominos.model.dto.address.AddressWithoutUserDTO;
 import com.example.dominos.model.dto.address.NewAddressDTO;
-import com.example.dominos.model.dto.user.UserWithoutAddressesDTO;
+import com.example.dominos.model.dto.user.UserWithoutAddressesAndOrdersDTO;
 import com.example.dominos.model.entities.Address;
 import com.example.dominos.model.entities.User;
+import com.example.dominos.model.exceptions.UnauthorizedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.util.List;
 public class AddressService extends AbstractService{
     public AddressResponseDTO getById(long aid) {
         AddressResponseDTO dto = modelMapper.map(getAddressById(aid), AddressResponseDTO.class);
-        dto.setUser(modelMapper.map(getAddressById(aid).getUser(), UserWithoutAddressesDTO.class));
+        dto.setUser(modelMapper.map(getAddressById(aid).getUser(), UserWithoutAddressesAndOrdersDTO.class));
         return dto;
     }
 
@@ -37,10 +38,14 @@ public class AddressService extends AbstractService{
     }
 
     public AddressWithoutUserDTO editAddress(AddressWithoutUserDTO dto, long uid) {
-        //check if user exists in db
+        //check if user and address exist in db
         User user = getUserById(uid);
+        Address address = getAddressById(dto.getId());
+        //check if user owns the address
+        if (user.getAddresses().stream().noneMatch(a -> a.getId() == address.getId())){
+            throw new UnauthorizedException("User does not own address!");
+        }
         //edit address
-        Address address = user.getAddresses().get((int) dto.getId());
         address.setCity(dto.getCity());
         address.setStreet(dto.getStreet());
         address.setStreetNumber(dto.getStreetNumber());
@@ -53,11 +58,14 @@ public class AddressService extends AbstractService{
         //check if user and address exist in db
         User user = getUserById(uid);
         Address address = getAddressById(aid);
+        //check if user owns the address
+        if (user.getAddresses().stream().noneMatch(a -> a.getId() == aid)){
+            throw new UnauthorizedException("User does not own address!");
+        }
         //edit address
         address.setCity("deleted at " + LocalDateTime.now());
         address.setStreet("deleted at " + LocalDateTime.now());
-        user.getAddresses().remove(address);
-        //save in db
+        //change owner to some dummy because user_id is nonnull field and address_id in orders?
         addressRepository.save(address);
         return true;
     }

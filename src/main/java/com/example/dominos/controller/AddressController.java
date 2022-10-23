@@ -3,6 +3,7 @@ package com.example.dominos.controller;
 import com.example.dominos.model.dto.address.AddressResponseDTO;
 import com.example.dominos.model.dto.address.AddressWithoutUserDTO;
 import com.example.dominos.model.dto.address.NewAddressDTO;
+import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,11 +24,16 @@ public class AddressController extends AbstractController{
     }
 
     @PostMapping("/addresses/{aid}")
-    public void selectAddress(@PathVariable long aid, HttpServletRequest request){
+    public AddressResponseDTO selectAddress(@PathVariable long aid, HttpServletRequest request){
         //check if logged
         getLoggedUserId(request);
         //save in session
         request.getSession().setAttribute(ADDRESS_ID,aid);
+        //check if saved
+        if(request.getSession().getAttribute(ADDRESS_ID) == null){
+            throw new BadRequestException("Address not selected!");
+        }
+        return addressService.getById(aid);
     }
 
     @GetMapping("/addresses")

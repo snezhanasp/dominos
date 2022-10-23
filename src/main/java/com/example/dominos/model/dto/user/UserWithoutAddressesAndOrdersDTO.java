@@ -3,7 +3,7 @@ package com.example.dominos.model.dto.user;
 import lombok.Data;
 
 @Data
-public class UserWithoutAddressesDTO {
+public class UserWithoutAddressesAndOrdersDTO {
 
     private long id;
     private String firstName;

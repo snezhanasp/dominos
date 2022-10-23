@@ -34,6 +34,8 @@ public abstract class AbstractService {
     @Autowired
     protected PizzaSpecificationRepository pizzaSpecificationRepository;
     @Autowired
+    protected FavouriteItemRepository favouriteItemRepository;
+    @Autowired
     protected ModelMapper modelMapper;
 
     protected User getUserById(long id){

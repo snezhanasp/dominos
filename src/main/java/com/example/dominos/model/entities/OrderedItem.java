@@ -37,4 +37,7 @@ public class OrderedItem {
     @OneToMany(mappedBy = "orderedItem")
     private Set<OrderItemQuantity> ordersAndQuantities;
 
+    @OneToMany(mappedBy = "orderedItem")
+    private Set<FavouriteItemName> favourites;
+
 }

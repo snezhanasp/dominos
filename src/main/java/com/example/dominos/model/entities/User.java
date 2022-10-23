@@ -1,12 +1,12 @@
 package com.example.dominos.model.entities;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -32,7 +32,11 @@ public class User {
     //todo make this sets?
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
+
     @OneToMany(mappedBy = "user")
     private List<Address> addresses;
+
+    @OneToMany(mappedBy = "user")
+    private Set<FavouriteItemName> favourites;
 
 }
