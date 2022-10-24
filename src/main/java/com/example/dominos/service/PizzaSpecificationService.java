@@ -1,15 +1,13 @@
 package com.example.dominos.service;
 
-import com.example.dominos.model.dto.pizza_specification.DoughResponseDTO;
-import com.example.dominos.model.dto.pizza_specification.PizzaSpecificationDTO;
-import com.example.dominos.model.dto.pizza_specification.SizeResponseDTO;
+import com.example.dominos.model.dto.pizza_specification.DoughDTO;
+import com.example.dominos.model.dto.pizza_specification.SizeDTO;
 import com.example.dominos.model.repositories.DoughRepository;
 import com.example.dominos.model.repositories.SizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PizzaSpecificationService extends AbstractService{
@@ -18,18 +16,15 @@ public class PizzaSpecificationService extends AbstractService{
     @Autowired
     DoughRepository doughRepository;
 
-    public List<SizeResponseDTO> getAllSizesForItem() {
+    public List<SizeDTO> getAllSizes() {
         return sizeRepository.findAll().stream()
-                .map(i-> modelMapper.map(i, SizeResponseDTO.class)).toList();
+                .map(i-> modelMapper.map(i, SizeDTO.class)).toList();
     }
 
-    public List<DoughResponseDTO> getAllDoughTypesForItem() {
+    public List<DoughDTO> getAllDoughTypes() {
         return doughRepository.findAll().stream()
-                .map(i-> modelMapper.map(i, DoughResponseDTO.class)).toList();
+                .map(i-> modelMapper.map(i, DoughDTO.class)).toList();
     }
 
-    public List<PizzaSpecificationDTO> getAllPizzaSpecifications() {
-        return pizzaSpecificationRepository.findAll().stream()
-                .map(p -> modelMapper.map(p, PizzaSpecificationDTO.class)).toList();
-    }
+
 }

@@ -19,7 +19,7 @@ public class CartController extends AbstractController{
     @Autowired
     CartService cartService;
 
-    @PostMapping("/cart") //to return smth
+    @PostMapping("/cart")
     public CartResponseDTO addItemToCart(@RequestBody ItemWithSpecificationAndQuantityDTO dto, HttpServletRequest request){
         //check if logged
         getLoggedUserId(request);

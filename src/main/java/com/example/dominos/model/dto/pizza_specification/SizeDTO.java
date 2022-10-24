@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class SizeResponseDTO {
+public class SizeDTO {
     private long id;
     private String name;
     private double price;

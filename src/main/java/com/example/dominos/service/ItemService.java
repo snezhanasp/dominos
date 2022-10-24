@@ -3,6 +3,7 @@ package com.example.dominos.service;
 import com.example.dominos.model.dto.item.ItemInfoDTO;
 import com.example.dominos.model.dto.item.ItemWithoutCategoryDTO;
 import com.example.dominos.model.entities.Category;
+import com.example.dominos.model.entities.Ingredient;
 import com.example.dominos.model.entities.Item;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,9 +27,21 @@ public class ItemService extends AbstractService{
 
     public List<ItemWithoutCategoryDTO> getItemsForCategory(long id){
         Category category = getCategoryById(id);
-        return itemRepository.findItemsByCategory(category).stream()
-                .map(i -> modelMapper.map(i, ItemWithoutCategoryDTO.class))
-                .toList();
+        List<Item> items = itemRepository.findItemsByCategory(category);
+        List<ItemWithoutCategoryDTO> itemDTOs = new ArrayList<>();
+        for(Item item : items){
+            ItemWithoutCategoryDTO dto = new ItemWithoutCategoryDTO();
+            dto.setId(item.getId());
+            dto.setPrice(item.getPrice());
+            dto.setPictureURL(item.getPictureURL());
+            dto.setName(item.getName());
+            dto.setIngredients(new ArrayList());
+            for(Ingredient ingredient : item.getIngredients()){
+                dto.getIngredients().add(ingredient.getName());
+            }
+            itemDTOs.add(dto);
+        }
+        return itemDTOs;
     }
     private Category getCategoryById(long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category not found"));

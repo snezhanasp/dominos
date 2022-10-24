@@ -11,5 +11,5 @@ public class ItemWithoutCategoryDTO {
     private String name;
     private double price;
     private String pictureURL;
-    private List<IngredientWithoutItemsAndTypeDTO> ingredients;
+    private List<String> ingredients;
 }

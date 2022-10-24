@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class DoughResponseDTO {
+public class DoughDTO {
     private long id;
     private String name;
     private double price;

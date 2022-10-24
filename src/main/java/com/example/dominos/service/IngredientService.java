@@ -12,7 +12,7 @@ import java.util.List;
 public class IngredientService extends AbstractService{
 
     public List<IngredientTypeResponseDTO> getAllIngredients() {
-        return ingredientRepository.findAll().stream()
+        return ingredientTypeRepository.findAll().stream()
                 .map(i -> modelMapper.map(i, IngredientTypeResponseDTO.class))
                 .toList();
     }
