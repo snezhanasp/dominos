@@ -19,7 +19,8 @@ public class AddressController extends AbstractController{
     private AddressService addressService;
 
     @GetMapping("/addresses/{aid}")
-    public AddressResponseDTO getById(@PathVariable long aid){
+    public AddressResponseDTO getById(@PathVariable long aid, HttpServletRequest request){
+        getLoggedUserId(request);
         return addressService.getById(aid);
     }
 

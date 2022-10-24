@@ -37,7 +37,7 @@ public class CartController extends AbstractController{
         return cartService.viewCart(cart);
     }
 
-    @GetMapping("/cart/show")
+    @GetMapping("/cart")
     public CartResponseDTO viewCart(HttpServletRequest request){
         getLoggedUserId(request);
         return cartService.viewCart((Set<CartItemWithQuantityDTO>) request.getSession().getAttribute(CART));
@@ -54,7 +54,7 @@ public class CartController extends AbstractController{
         return cartService.removeItemFromCart(cart, dto);
     }
 
-    @PutMapping("/cart/empty")
+    @DeleteMapping("/cart")
     public void emptyCart(HttpServletRequest request){
         getLoggedUserId(request);
         HttpSession session = request.getSession();
