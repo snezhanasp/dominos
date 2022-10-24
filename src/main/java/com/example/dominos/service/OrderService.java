@@ -81,8 +81,7 @@ public class OrderService extends AbstractService{
     private OrderedItem saveItem(OrderItemDTO dto){
         OrderedItem orderedItem = new OrderedItem();
         orderedItem.setItem(getItemById(dto.getItemId()));
-        // todo
-        orderedItem.setPizzaSpecification(getPizzaSpecification(dto.getPizzaSpecificationId()));
+        orderedItem.setPizzaSpecification(getPizzaSpecificationById(dto.getPizzaSpecification().getId()));
         orderedItem.setIngredients(extractIngredients(dto));
         orderedItemRepository.save(orderedItem);
         return orderedItem;
@@ -105,7 +104,7 @@ public class OrderService extends AbstractService{
                 .map(i -> getIngredientById(i.getId()))
                 .toList();
     }
-    private PizzaSpecification getPizzaSpecification(long id){
+    private PizzaSpecification getPizzaSpecificationById(long id){
         return pizzaSpecificationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Pizza specification not found"));
     }

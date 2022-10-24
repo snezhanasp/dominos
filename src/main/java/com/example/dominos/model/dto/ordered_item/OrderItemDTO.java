@@ -10,7 +10,7 @@ import java.util.List;
 public class OrderItemDTO {
 
     private long itemId;
-    private long pizzaSpecificationId;
+    private PizzaSpecificationDTO pizzaSpecification;
     private List<IngredientWithoutItemsAndTypeDTO> ingredients;
     private double price;
 }

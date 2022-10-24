@@ -55,9 +55,10 @@ public abstract class AbstractService {
         return paymentMethodRepository.findById(id).orElseThrow(() -> new NotFoundException("Payment method not found!"));
     }
 
-//    protected PizzaSpecification getPizzaSpecById(long id){
-//        return pizzaSpecificationRepository.findById(id).orElseThrow(() -> new NotFoundException("Pizza specification not found!"));
-//    }
+    protected PizzaSpecification getPizzaSpecificationBySizeIdAndDoughId(long sizeId, long doughId){
+        return pizzaSpecificationRepository.findBySize_IdAndDoughType_Id(sizeId, doughId)
+                .orElseThrow(()->new NotFoundException("Pizza specification with this size and dough not found!"));
+    }
 
     protected Ingredient getIngredientById(long id){
         return ingredientRepository.findById(id).orElseThrow(() -> new NotFoundException("Ingredient not found"));    }

@@ -6,6 +6,7 @@ import com.example.dominos.model.dto.item.CartItemWithQuantityDTO;
 import com.example.dominos.model.dto.item.ItemWithSpecificationAndQuantityDTO;
 import com.example.dominos.model.dto.ordered_item.OrderItemDTO;
 import com.example.dominos.model.dto.ordered_item.OrderItemWithSpecificationDTO;
+import com.example.dominos.model.dto.pizza_specification.PizzaSpecificationDTO;
 import com.example.dominos.model.entities.Ingredient;
 import com.example.dominos.model.entities.Item;
 import com.example.dominos.model.entities.PizzaSpecification;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -37,8 +37,10 @@ public class CartService extends AbstractService{
         validateOrderItem(dto.getItem(), item);
         CartItemWithQuantityDTO cartItem = modelMapper.map(dto, CartItemWithQuantityDTO.class);
 
-        long specificationId = getPizzaSpecificationId(dto.getItem().getSizeId(), dto.getItem().getDoughId());
-        cartItem.getItem().setPizzaSpecificationId(specificationId);
+        if(item.getCategory().equals(PIZZA)) {
+            PizzaSpecification specification = getPizzaSpecificationBySizeIdAndDoughId(dto.getItem().getSizeId(), dto.getItem().getDoughId());
+            cartItem.getItem().setPizzaSpecification(modelMapper.map(specification, PizzaSpecificationDTO.class));
+        }
 
         double price = calculatePrice(cartItem.getItem(), item);
         cartItem.getItem().setPrice(price);
@@ -56,25 +58,6 @@ public class CartService extends AbstractService{
         return cart;
     }
 
-    private long getPizzaSpecificationId(long sizeId, long doughId){
-        Optional<PizzaSpecification> specification = pizzaSpecificationRepository.findBySize_IdAndDoughType_Id(sizeId, doughId);
-        if(specification.isPresent()){
-            return specification.get().getId();
-        }
-        PizzaSpecification newSpecification = new PizzaSpecification();
-        newSpecification.setSize(getSizeById(sizeId));
-        newSpecification.setDoughType(getDoughById(doughId));
-        pizzaSpecificationRepository.save(newSpecification);
-        return newSpecification.getId();
-    }
-
-    private PizzaSpecification.Size getSizeById(long id){
-        return sizeRepository.findById(id).orElseThrow(()-> new NotFoundException("Size not found"));
-    }
-
-    private PizzaSpecification.DoughType getDoughById(long id){
-        return doughRepository.findById(id).orElseThrow(()->new NotFoundException("Dough not found"));
-    }
     private void validateOrderItem(OrderItemWithSpecificationDTO dto, Item item) {
         boolean hasExtraIngredients = (dto.getIngredients() != null);
         boolean hasSize = (dto.getSizeId() > 0);
@@ -100,8 +83,8 @@ public class CartService extends AbstractService{
 
     private double calculatePrice(OrderItemDTO dto, Item item) {
         double price = item.getPrice();
-        if(dto.getPizzaSpecificationId() > 0) {
-            price += calculatePizzaSpecificationPriceForId(dto.getPizzaSpecificationId());
+        if(dto.getPizzaSpecification() != null) {
+            price += calculatePizzaSpecificationPrice(dto.getPizzaSpecification());
         }
         if(dto.getIngredients() != null) {
             price += calculateExtraIngredientsPrice(dto, item);
@@ -109,29 +92,19 @@ public class CartService extends AbstractService{
         return price;
     }
 
-    private double calculatePizzaSpecificationPriceForId(long id) {
+    protected double calculatePizzaSpecificationPrice(PizzaSpecificationDTO specification) {
          double price = 0;
-         PizzaSpecification pizzaSpecification = pizzaSpecificationRepository.findById(id)
-                .orElseThrow(() ->new NotFoundException("Pizza specification not found"));
-         price += pizzaSpecification.getDoughType().getPrice();
-         price += pizzaSpecification.getSize().getPrice();
+         price += specification.getDoughType().getPrice();
+         price += specification.getSize().getPrice();
          return price;
     }
 
     private double calculateExtraIngredientsPrice(OrderItemDTO dto, Item item){
         double price = 0;
-
-        List<IngredientWithoutItemsAndTypeDTO> ingredientsInOrder = dto.getIngredients();
-        Set<Ingredient> ingredientsInItem = item.getIngredients();
-        int extraIngredients = ingredientsInOrder.size() - ingredientsInItem.size();
+        int extraIngredients = dto.getIngredients().size() - item.getIngredients().size();
 
         if(extraIngredients > 0){
-            for(IngredientWithoutItemsAndTypeDTO ingredientDTO : ingredientsInOrder){
-                Ingredient ingredient = getIngredientById(ingredientDTO.getId());
-                if(!ingredientsInItem.contains(ingredient)){
-                    price += ingredient.getIngredientType().getPrice();
-                }
-            }
+            price += extraIngredients * 2; //each addition is 2lv
         }
         return price;
     }

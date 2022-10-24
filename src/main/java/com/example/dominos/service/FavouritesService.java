@@ -46,9 +46,8 @@ public class FavouritesService extends AbstractService{
         OrderedItem orderedItem = new OrderedItem();
         orderedItem.setItem(getItemById(dto.getItemId()));
 
-        PizzaSpecification.Size size = modelMapper.map(dto.getSize(), PizzaSpecification.Size.class);
-        PizzaSpecification.DoughType doughType = modelMapper.map(dto.getDoughType(), PizzaSpecification.DoughType.class);
-        orderedItem.setPizzaSpecification(pizzaSpecificationRepository.findBySize_IdAndDoughType_Id(size.getId(),doughType.getId()).orElseThrow(()->new NotFoundException("Pizza specification not found!")));
+        PizzaSpecification specification = getPizzaSpecificationBySizeIdAndDoughId(dto.getSize().getId(), dto.getDoughType().getId());
+        orderedItem.setPizzaSpecification(specification);
 
         List<Ingredient> ingredients = dto.getIngredients().stream().map(i -> modelMapper.map(i, Ingredient.class)).toList();
         orderedItem.setIngredients(ingredients);
