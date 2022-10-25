@@ -28,6 +28,8 @@ public class User {
     private String password;
     @Column
     private String phone;
+    @Column
+    private boolean isStaff;
 
     //todo make this sets?
     @OneToMany(mappedBy = "user")

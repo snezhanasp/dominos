@@ -62,11 +62,8 @@ public class AddressService extends AbstractService{
         if (user.getAddresses().stream().noneMatch(a -> a.getId() == aid)){
             throw new UnauthorizedException("User does not own address!");
         }
-        //edit address
-        address.setCity("deleted at " + LocalDateTime.now());
-        address.setStreet("deleted at " + LocalDateTime.now());
-        //change owner to some dummy because user_id is nonnull field and address_id in orders?
-        addressRepository.save(address);
+        //delete address
+        addressRepository.delete(address);
         return true;
     }
 }

@@ -83,7 +83,8 @@ public class UserService extends AbstractService{
             throw new BadRequestException("Email not valid!");
         }
         if (!passwordIsValid(password)){
-            throw new BadRequestException("Password not valid!");
+            throw new BadRequestException("Password not valid! Password must contain one lowercase letter, " +
+                    "one uppercase letter, one digit and one special character.");
         }
         if (!password.equals(confirmPassword)){
             throw new BadRequestException("Passwords do not match!");
