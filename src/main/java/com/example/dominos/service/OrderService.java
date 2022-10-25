@@ -74,10 +74,6 @@ public class OrderService extends AbstractService{
         orderItemQuantityRepository.save(orderItemQuantity);
     }
 
-    private Status getStatusById(long id){
-        return statusRepository.findById(id).orElseThrow(() -> new NotFoundException("Order status not found!"));
-    }
-
     private OrderedItem saveItem(OrderItemDTO dto){
         OrderedItem orderedItem = new OrderedItem();
         orderedItem.setItem(getItemById(dto.getItemId()));
@@ -115,7 +111,7 @@ public class OrderService extends AbstractService{
     }
 
     public OrderResponseDTO getOrderById(long oid, Long uid) {
-        Order order = orderRepository.findById(oid).orElseThrow(()-> new BadRequestException("Order not found"));
+        Order order = getOrderById(oid);
         if(order.getUser().getId() != uid){
             throw new AuthorizationServiceException("User is not owner");
         }

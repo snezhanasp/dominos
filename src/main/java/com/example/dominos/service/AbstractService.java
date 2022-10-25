@@ -63,4 +63,11 @@ public abstract class AbstractService {
     protected Ingredient getIngredientById(long id){
         return ingredientRepository.findById(id).orElseThrow(() -> new NotFoundException("Ingredient not found"));    }
 
+    protected Status getStatusById(long id){
+        return statusRepository.findById(id).orElseThrow(() -> new NotFoundException("Status not found!"));
+    }
+
+    protected Order getOrderById(long id){
+        return orderRepository.findById(id).orElseThrow(()-> new NotFoundException("Order not found"));
+    }
 }
