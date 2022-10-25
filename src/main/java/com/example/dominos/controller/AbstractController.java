@@ -6,6 +6,7 @@ import com.example.dominos.model.entities.OrderedItem;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.exceptions.UnauthorizedException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+@Log4j2
 public abstract class AbstractController {
 
     public static final String LOGGED = "LOGGED";
@@ -43,6 +45,7 @@ public abstract class AbstractController {
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDTO handleAllOthers(Exception e){
+        log.error("Error occurred: ", e);
         return buildErrorInfo(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
