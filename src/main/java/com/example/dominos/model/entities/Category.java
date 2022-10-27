@@ -1,11 +1,16 @@
 package com.example.dominos.model.entities;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity(name = "categories")
 public class Category {
 
@@ -17,7 +22,6 @@ public class Category {
     @Column
     private boolean isModifiable;
 
-    // todo set
     @OneToMany(mappedBy = "category")
     private List<Item> items;
 

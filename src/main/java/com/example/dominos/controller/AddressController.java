@@ -20,21 +20,18 @@ public class AddressController extends AbstractController{
 
     @GetMapping("/addresses/{aid}")
     public AddressResponseDTO getById(@PathVariable long aid, HttpServletRequest request){
-        getLoggedUserId(request);
-        return addressService.getById(aid);
+        return addressService.getById(aid, getLoggedUserId(request));
     }
 
     @PostMapping("/addresses/{aid}")
     public AddressResponseDTO selectAddress(@PathVariable long aid, HttpServletRequest request){
-        //check if logged
-        getLoggedUserId(request);
         //save in session
         request.getSession().setAttribute(ADDRESS_ID,aid);
         //check if saved
         if(request.getSession().getAttribute(ADDRESS_ID) == null){
             throw new BadRequestException("Address not selected!");
         }
-        return addressService.getById(aid);
+        return addressService.getById(aid, getLoggedUserId(request));
     }
 
     @GetMapping("/addresses")

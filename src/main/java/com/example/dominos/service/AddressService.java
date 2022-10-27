@@ -14,9 +14,15 @@ import java.util.List;
 
 @Service
 public class AddressService extends AbstractService{
-    public AddressResponseDTO getById(long aid) {
-        AddressResponseDTO dto = modelMapper.map(getAddressById(aid), AddressResponseDTO.class);
-        dto.setUser(modelMapper.map(getAddressById(aid).getUser(), UserWithoutAddressesAndOrdersDTO.class));
+    public AddressResponseDTO getById(long aid, long uid) {
+        //check if user owns the address
+        User user = getUserById(uid);
+        Address address = getAddressById(aid);
+        if (user.getAddresses().stream().noneMatch(a -> a.getId() == address.getId())){
+            throw new UnauthorizedException("User does not own address!");
+        }
+        AddressResponseDTO dto = modelMapper.map(address, AddressResponseDTO.class);
+        dto.setUser(modelMapper.map(user, UserWithoutAddressesAndOrdersDTO.class));
         return dto;
     }
 

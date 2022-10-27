@@ -22,4 +22,8 @@ public class OrderOrderedItemKey implements Serializable {
     @Column(name = "ordered_item_id")
     private long orderedItemId;
 
+    public OrderOrderedItemKey(long orderId, long orderedItemId) {
+        this.orderId = orderId;
+        this.orderedItemId = orderedItemId;
+    }
 }

@@ -1,6 +1,7 @@
 HELP.md
-
-logs/
+logs
+*.log
+**/logs
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -33,3 +34,5 @@ build/
 
 ### VS Code ###
 .vscode/
+*.log
+uploads/

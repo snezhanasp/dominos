@@ -24,6 +24,7 @@ import java.util.Set;
 @Service
 public class CartService extends AbstractService{
 
+    public static final int PRICE = 2;
     @Autowired
     SizeRepository sizeRepository;
     @Autowired
@@ -33,29 +34,37 @@ public class CartService extends AbstractService{
 
     public Set<CartItemWithQuantityDTO> addItemToCart(Set<CartItemWithQuantityDTO> cart, ItemWithSpecificationAndQuantityDTO dto) {
 
+        if(dto.getItem() == null){
+            throw new BadRequestException("Item not found");
+        }
         Item item = getItemById(dto.getItem().getItemId());
         validateOrderItem(dto.getItem(), item);
-        CartItemWithQuantityDTO cartItem = modelMapper.map(dto, CartItemWithQuantityDTO.class);
 
-        if(item.getCategory().equals(PIZZA)) {
+        CartItemWithQuantityDTO cartItemWithQuantity = modelMapper.map(dto, CartItemWithQuantityDTO.class);
+        OrderItemDTO orderItem = cartItemWithQuantity.getItem();
+
+        if(item.getCategory().getName().equals(PIZZA)) {
             PizzaSpecification specification = getPizzaSpecificationBySizeIdAndDoughId(dto.getItem().getSizeId(), dto.getItem().getDoughId());
-            cartItem.getItem().setPizzaSpecification(modelMapper.map(specification, PizzaSpecificationDTO.class));
+            orderItem.setPizzaSpecification(modelMapper.map(specification, PizzaSpecificationDTO.class));
         }
 
-        double price = calculatePrice(cartItem.getItem(), item);
-        cartItem.getItem().setPrice(price);
+        double price = calculatePrice(orderItem, item);
+        orderItem.setPrice(price);
+        addToCart(cart, cartItemWithQuantity);
+        return cart;
+    }
 
-        if(cart.contains(cartItem)){
+    private void addToCart(Set<CartItemWithQuantityDTO> cart, CartItemWithQuantityDTO dto){
+        if(cart.contains(dto)){
             for(Iterator<CartItemWithQuantityDTO> it = cart.iterator(); it.hasNext();){
                 CartItemWithQuantityDTO cartItemDTO = it.next();
-                if(cartItemDTO.equals(cartItem)){
-                    cartItemDTO.setQuantity(cartItemDTO.getQuantity() + cartItem.getQuantity());
+                if(cartItemDTO.equals(dto)){
+                    cartItemDTO.setQuantity(cartItemDTO.getQuantity() + dto.getQuantity());
                 }
             }
-            return cart;
+            return;
         }
-        cart.add(cartItem);
-        return cart;
+        cart.add(dto);
     }
 
     private void validateOrderItem(OrderItemWithSpecificationDTO dto, Item item) {
@@ -104,7 +113,7 @@ public class CartService extends AbstractService{
         int extraIngredients = dto.getIngredients().size() - item.getIngredients().size();
 
         if(extraIngredients > 0){
-            price += extraIngredients * 2; //each addition is 2lv
+            price += extraIngredients * PRICE; //each addition is 2lv
         }
         return price;
     }

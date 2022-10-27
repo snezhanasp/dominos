@@ -53,6 +53,7 @@ public class ItemService extends AbstractService{
         String extension = FilenameUtils.getExtension(image.getOriginalFilename());
         String name = "uploads" + File.separator + System.nanoTime() + "." + extension;
 
+        // todo check if folder exists
         //copy image to file system
         File file = new File(name);
         if (!file.exists()) {

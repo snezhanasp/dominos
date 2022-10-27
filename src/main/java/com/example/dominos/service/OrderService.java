@@ -8,6 +8,7 @@ import com.example.dominos.model.dto.ordered_item.OrderItemDTO;
 import com.example.dominos.model.entities.*;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
+import com.example.dominos.model.exceptions.UnauthorizedException;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +32,8 @@ public class OrderService extends AbstractService{
         if(totalPrice < 10){
             throw new BadRequestException("Order has to be at least 10lv.");
         }
+        Order order = saveOrder(dto, uid, aid, totalPrice);
 
-        Order order = saveOrder(dto, uid, aid);
-
-        Set<CartItemWithQuantityDTO> items = cart;
         for (CartItemWithQuantityDTO cartItemDTO: cart) {
             OrderedItem orderedItem = saveItem(cartItemDTO.getItem());
             int quantity = cartItemDTO.getQuantity();
@@ -42,7 +41,7 @@ public class OrderService extends AbstractService{
         }
 
         OrderResponseDTO orderResponseDTO = modelMapper.map(order,OrderResponseDTO.class);
-        orderResponseDTO.setItems(items);
+        orderResponseDTO.setItems(cart);
         return orderResponseDTO;
     }
 
@@ -55,20 +54,13 @@ public class OrderService extends AbstractService{
     }
 
     private void saveOrderOrderedItemRelation(Order order, OrderedItem orderedItem, int quantity) {
-        OrderOrderedItemKey key = new OrderOrderedItemKey();
-
-        key.setOrderId(order.getId());
-        key.setOrderedItemId(orderedItem.getId());
+        OrderOrderedItemKey key = new OrderOrderedItemKey(order.getId(), orderedItem.getId());
 
         OrderItemQuantity orderItemQuantity = new OrderItemQuantity();
         orderItemQuantity.setId(key);
         orderItemQuantity.setOrder(order);
         orderItemQuantity.setOrderedItem(orderedItem);
         orderItemQuantity.setQuantity(quantity);
-
-        if(order.getItemsAndQuantities() == null){
-            order.setItemsAndQuantities(new HashSet<>());
-        }
         order.getItemsAndQuantities().add(orderItemQuantity);
 
         orderItemQuantityRepository.save(orderItemQuantity);
@@ -77,15 +69,17 @@ public class OrderService extends AbstractService{
     private OrderedItem saveItem(OrderItemDTO dto){
         OrderedItem orderedItem = new OrderedItem();
         orderedItem.setItem(getItemById(dto.getItemId()));
-        orderedItem.setPizzaSpecification(getPizzaSpecificationById(dto.getPizzaSpecification().getId()));
+        if(dto.getPizzaSpecification() != null) {
+            orderedItem.setPizzaSpecification(getPizzaSpecificationById(dto.getPizzaSpecification().getId()));
+        }
         orderedItem.setIngredients(extractIngredients(dto));
         orderedItemRepository.save(orderedItem);
         return orderedItem;
     }
 
-    private Order saveOrder(CreateOrderDTO dto, long uid, long aid){
+    private Order saveOrder(CreateOrderDTO dto, long uid, long aid, double price){
         Order order = new Order();
-        order.setPrice(dto.getPrice());
+        order.setPrice(price);
         order.setOrderedAt(LocalDateTime.now());
         order.setStatus(getStatusById(ACCEPTED));
         order.setPayment(getPaymentMethodById(dto.getPaymentMethodId()));
@@ -96,6 +90,9 @@ public class OrderService extends AbstractService{
     }
 
     private List<Ingredient> extractIngredients(OrderItemDTO dto){
+        if(dto.getIngredients() == null){
+            return null;
+        }
         return dto.getIngredients().stream()
                 .map(i -> getIngredientById(i.getId()))
                 .toList();
@@ -113,7 +110,7 @@ public class OrderService extends AbstractService{
     public OrderResponseDTO getOrderById(long oid, Long uid) {
         Order order = getOrderById(oid);
         if(order.getUser().getId() != uid){
-            throw new AuthorizationServiceException("User is not owner");
+            throw new UnauthorizedException("User is not owner");
         }
         return modelMapper.map(order, OrderResponseDTO.class);
     }

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -38,5 +39,5 @@ public class Order {
     private PaymentMethod payment;
 
     @OneToMany(mappedBy = "order")
-    private Set<OrderItemQuantity> itemsAndQuantities;
+    private Set<OrderItemQuantity> itemsAndQuantities = new HashSet<>();
 }

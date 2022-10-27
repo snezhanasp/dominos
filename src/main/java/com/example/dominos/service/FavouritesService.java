@@ -9,6 +9,7 @@ import com.example.dominos.model.dto.pizza_specification.SizeDTO;
 import com.example.dominos.model.entities.*;
 import com.example.dominos.model.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Set;
 
 @Service
 public class FavouritesService extends AbstractService{
+    @Transactional
     public PizzaInfoDTO addNewPizza(CreatePizzaDTO dto, long uid) {
         User user = getUserById(uid);
         OrderedItem orderedItem = orderedItemRepository.save(createItem(dto));

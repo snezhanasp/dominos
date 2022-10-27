@@ -29,6 +29,7 @@ public class StatusService extends AbstractService{
         }
         Order order = getOrderById(oid);
         order.setStatus(getStatusById(sid));
+        orderRepository.save(order);
         return modelMapper.map(order, OrderResponseDTO.class);
     }
 }
