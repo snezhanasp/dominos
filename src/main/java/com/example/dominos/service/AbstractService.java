@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractService {
 
+    public static final int ACCEPTED = 1;
+    public static final int READY_FOR_DELIVERY = 2;
+    public static final int CANCELED = 4;
+
     @Autowired
     protected UserRepository userRepository;
     @Autowired

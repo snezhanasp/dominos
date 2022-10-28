@@ -9,7 +9,6 @@ import com.example.dominos.model.entities.*;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.exceptions.UnauthorizedException;
-import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,7 @@ import java.util.*;
 @Service
 public class OrderService extends AbstractService{
 
-    public static final int ACCEPTED = 1;
+    public static final int MIN_ORDER_PRICE = 10;
 
     @Transactional
     public OrderResponseDTO createOrder(CreateOrderDTO dto, Set<CartItemWithQuantityDTO> cart, long uid, long aid) {
@@ -29,7 +28,7 @@ public class OrderService extends AbstractService{
             throw new BadRequestException("Cart is empty!");
         }
         double totalPrice = calculatePrice(cart);
-        if(totalPrice < 10){
+        if(totalPrice < MIN_ORDER_PRICE){
             throw new BadRequestException("Order has to be at least 10lv.");
         }
         Order order = saveOrder(dto, uid, aid, totalPrice);

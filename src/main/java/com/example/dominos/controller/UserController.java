@@ -28,9 +28,9 @@ public class UserController extends AbstractController{
         }
     }
 
-    @GetMapping("/users/{id}")
-    public UserWithoutPassDTO getById(@PathVariable long id){
-        return userService.getById(id);
+    @GetMapping("/users")
+    public UserWithoutPassDTO getProfile(HttpServletRequest request){
+        return userService.getById(getLoggedUserId(request));
     }
 
     @PostMapping("/users")
