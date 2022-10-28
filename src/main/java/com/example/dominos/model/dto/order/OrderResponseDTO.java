@@ -5,12 +5,16 @@ import com.example.dominos.model.dto.StatusWithoutOrdersDTO;
 import com.example.dominos.model.dto.address.AddressWithoutUserDTO;
 
 import com.example.dominos.model.dto.item.CartItemWithQuantityDTO;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class OrderResponseDTO {
 
     private long id;
@@ -20,5 +24,4 @@ public class OrderResponseDTO {
     private StatusWithoutOrdersDTO status;
     private PaymentMethodWithoutOrdersDTO paymentMethod;
     private Set<CartItemWithQuantityDTO> items;
-    //private Map<OrderedItemDTO, Integer> items; //TODO pizza specification?? + hashcode equals
 }

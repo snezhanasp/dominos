@@ -1,24 +1,20 @@
 package com.example.dominos.service;
 
 import com.example.dominos.model.dto.cart.CartResponseDTO;
-import com.example.dominos.model.dto.ingredient.IngredientWithoutItemsAndTypeDTO;
 import com.example.dominos.model.dto.item.CartItemWithQuantityDTO;
 import com.example.dominos.model.dto.item.ItemWithSpecificationAndQuantityDTO;
 import com.example.dominos.model.dto.ordered_item.OrderItemDTO;
 import com.example.dominos.model.dto.ordered_item.OrderItemWithSpecificationDTO;
 import com.example.dominos.model.dto.pizza_specification.PizzaSpecificationDTO;
-import com.example.dominos.model.entities.Ingredient;
 import com.example.dominos.model.entities.Item;
 import com.example.dominos.model.entities.PizzaSpecification;
 import com.example.dominos.model.exceptions.BadRequestException;
-import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.repositories.DoughRepository;
 import com.example.dominos.model.repositories.SizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -131,9 +127,10 @@ public class CartService extends AbstractService{
             CartItemWithQuantityDTO cartItemDTO = it.next();
             if(cartItemDTO.equals(dto)){
                 cartItemDTO.setQuantity(cartItemDTO.getQuantity() - dto.getQuantity());
-            }
-            if(cartItemDTO.getQuantity() <= 0){
-                cart.remove(dto);
+                if(cartItemDTO.getQuantity() <= 0){
+                    it.remove();
+                }
+                break;
             }
         }
         return new CartResponseDTO(cart);

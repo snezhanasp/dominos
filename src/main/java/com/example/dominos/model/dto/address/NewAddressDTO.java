@@ -1,8 +1,12 @@
 package com.example.dominos.model.dto.address;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Setter
+@NoArgsConstructor
+@Getter
 public class NewAddressDTO {
 
     private String city;

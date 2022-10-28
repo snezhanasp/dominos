@@ -1,9 +1,13 @@
 package com.example.dominos.model.dto.address;
 
 import com.example.dominos.model.dto.user.UserWithoutAddressesAndOrdersDTO;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Setter
+@NoArgsConstructor
+@Getter
 public class AddressResponseDTO {
 
     private long id;

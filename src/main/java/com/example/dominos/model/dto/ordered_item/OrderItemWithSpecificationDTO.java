@@ -1,11 +1,15 @@
 package com.example.dominos.model.dto.ordered_item;
 
 import com.example.dominos.model.dto.ingredient.IngredientWithoutItemsAndTypeDTO;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class OrderItemWithSpecificationDTO {
     private long itemId;
     private long sizeId;

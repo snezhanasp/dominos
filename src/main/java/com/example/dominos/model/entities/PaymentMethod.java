@@ -1,11 +1,10 @@
 package com.example.dominos.model.entities;
 
-import lombok.Data;
-
+import lombok.Getter;
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
 @Entity(name = "payment_methods")
 public class PaymentMethod {
     @Id

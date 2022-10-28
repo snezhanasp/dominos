@@ -9,6 +9,9 @@ import com.example.dominos.model.entities.*;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.exceptions.UnauthorizedException;
+import com.example.dominos.model.repositories.OrderItemQuantityRepository;
+import com.example.dominos.model.repositories.PaymentMethodRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,10 @@ import java.util.*;
 @Service
 public class OrderService extends AbstractService{
 
+    @Autowired
+    protected PaymentMethodRepository paymentMethodRepository;
+    @Autowired
+    protected OrderItemQuantityRepository orderItemQuantityRepository;
     public static final int MIN_ORDER_PRICE = 10;
 
     @Transactional
@@ -87,6 +94,9 @@ public class OrderService extends AbstractService{
         orderRepository.save(order);
         return order;
     }
+    private PaymentMethod getPaymentMethodById(long id){
+        return paymentMethodRepository.findById(id).orElseThrow(() -> new NotFoundException("Payment method not found!"));
+    }
 
     private List<Ingredient> extractIngredients(OrderItemDTO dto){
         if(dto.getIngredients() == null){
@@ -100,6 +110,9 @@ public class OrderService extends AbstractService{
         return pizzaSpecificationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Pizza specification not found"));
     }
+
+    private Ingredient getIngredientById(long id){
+        return ingredientRepository.findById(id).orElseThrow(() -> new NotFoundException("Ingredient not found"));    }
 
     public List<OrderResponseDTO> getOrdersForUser(long uid) {
         User u = getUserById(uid);

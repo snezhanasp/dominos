@@ -1,6 +1,5 @@
 package com.example.dominos.model.entities;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,8 +10,7 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-@Entity
-@Table(name = "addresses")
+@Entity(name="addresses")
 public class Address {
 
     @Id

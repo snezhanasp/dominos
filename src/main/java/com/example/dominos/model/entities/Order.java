@@ -12,8 +12,7 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-@Entity
-@Table(name="orders")
+@Entity(name="orders")
 public class Order {
 
     @Id

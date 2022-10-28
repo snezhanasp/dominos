@@ -1,12 +1,11 @@
 package com.example.dominos.model.entities;
 
-import lombok.Data;
-import org.w3c.dom.ls.LSInput;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
 @Entity(name = "statuses")
 public class Status {
     @Id

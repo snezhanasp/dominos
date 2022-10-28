@@ -1,8 +1,6 @@
 package com.example.dominos.controller;
 
 import com.example.dominos.model.dto.ErrorDTO;
-import com.example.dominos.model.dto.item.ItemInfoDTO;
-import com.example.dominos.model.entities.OrderedItem;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.exceptions.UnauthorizedException;
@@ -14,8 +12,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @Log4j2
 public abstract class AbstractController {

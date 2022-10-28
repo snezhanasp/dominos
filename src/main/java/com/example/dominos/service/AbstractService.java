@@ -17,8 +17,6 @@ public abstract class AbstractService {
     @Autowired
     protected ItemRepository itemRepository;
     @Autowired
-    protected IngredientTypeRepository ingredientTypeRepository;
-    @Autowired
     protected CategoryRepository categoryRepository;
     @Autowired
     protected IngredientRepository ingredientRepository;
@@ -30,11 +28,6 @@ public abstract class AbstractService {
     protected OrderRepository orderRepository;
     @Autowired
     protected StatusRepository statusRepository;
-    @Autowired
-    protected PaymentMethodRepository paymentMethodRepository;
-
-    @Autowired
-    protected OrderItemQuantityRepository orderItemQuantityRepository;
     @Autowired
     protected PizzaSpecificationRepository pizzaSpecificationRepository;
     @Autowired
@@ -54,19 +47,10 @@ public abstract class AbstractService {
         return addressRepository.findById(id).orElseThrow(() -> new NotFoundException("Address not found!"));
     }
 
-    //not here
-    protected PaymentMethod getPaymentMethodById(long id){
-        return paymentMethodRepository.findById(id).orElseThrow(() -> new NotFoundException("Payment method not found!"));
-    }
-
     protected PizzaSpecification getPizzaSpecificationBySizeIdAndDoughId(long sizeId, long doughId){
         return pizzaSpecificationRepository.findBySize_IdAndDoughType_Id(sizeId, doughId)
                 .orElseThrow(()->new NotFoundException("Pizza specification with this size and dough not found!"));
     }
-
-    protected Ingredient getIngredientById(long id){
-        return ingredientRepository.findById(id).orElseThrow(() -> new NotFoundException("Ingredient not found"));    }
-
     protected Status getStatusById(long id){
         return statusRepository.findById(id).orElseThrow(() -> new NotFoundException("Status not found!"));
     }

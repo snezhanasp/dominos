@@ -1,13 +1,12 @@
 package com.example.dominos.model.entities;
 
-
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.List;
 
-
-@Data
+@Getter
 @Entity(name = "pizza_specifications")
 public class PizzaSpecification {
 

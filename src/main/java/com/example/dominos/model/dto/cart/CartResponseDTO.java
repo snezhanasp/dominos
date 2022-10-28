@@ -7,8 +7,8 @@ import lombok.Setter;
 
 import java.util.Set;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 public class CartResponseDTO {
     Set<CartItemWithQuantityDTO> items;
