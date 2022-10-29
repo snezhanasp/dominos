@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -25,9 +26,9 @@ public class ItemController extends AbstractController{
         return  itemService.getItemsForCategory(id);
     }
 
-    @PostMapping("/menu/items/{id}/image")
-    public String uploadItemImage(@PathVariable long id, @RequestParam(value = "image") MultipartFile image){
-        return itemService.uploadItemImage(id,image);
+    @PostMapping("/menu/items/{fid}/image")
+    public String uploadItemImage(@PathVariable long fid, @RequestParam(value = "image") MultipartFile image, HttpServletRequest request){
+        return itemService.uploadItemImage(fid,image, getLoggedUserId(request));
     }
 
 }

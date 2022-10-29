@@ -6,6 +6,7 @@ import com.example.dominos.model.dto.address.NewAddressDTO;
 import com.example.dominos.model.dto.user.UserWithoutAddressesAndOrdersDTO;
 import com.example.dominos.model.entities.Address;
 import com.example.dominos.model.entities.User;
+import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.UnauthorizedException;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +29,9 @@ public class AddressService extends AbstractService{
     public AddressWithoutUserDTO addNewAddress(NewAddressDTO newAddressDTO, long uid) {
         //check if user exists in db
         User user = getUserById(uid);
-        //create new address
+        checkData(newAddressDTO);
         Address address = modelMapper.map(newAddressDTO, Address.class);
         address.setUser(user);
-        //save in db
         addressRepository.save(address);
         return modelMapper.map(address,AddressWithoutUserDTO.class);
     }
@@ -51,6 +51,7 @@ public class AddressService extends AbstractService{
             throw new UnauthorizedException("User does not own address!");
         }
         //edit address
+        checkData(modelMapper.map(dto,NewAddressDTO.class));
         address.setCity(dto.getCity());
         address.setStreet(dto.getStreet());
         address.setStreetNumber(dto.getStreetNumber());
@@ -70,5 +71,11 @@ public class AddressService extends AbstractService{
         //delete address
         addressRepository.delete(address);
         return true;
+    }
+
+    private void checkData(NewAddressDTO newAddressDTO) {
+        if (newAddressDTO.getCity() == null || newAddressDTO.getStreet() == null || newAddressDTO.getStreetNumber() == 0){
+            throw new BadRequestException("Address information missing! Please fill all the information!");
+        }
     }
 }
