@@ -6,6 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode
 public class CartItemWithQuantityDTO {
     private OrderItemDTO item;
     @EqualsAndHashCode.Exclude

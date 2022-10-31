@@ -1,7 +1,7 @@
 package com.example.dominos.controller;
 
-import com.example.dominos.model.dto.StatusWithoutOrdersDTO;
 import com.example.dominos.model.dto.order.OrderResponseDTO;
+import com.example.dominos.model.entities.Status;
 import com.example.dominos.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,7 @@ public class StatusController extends AbstractController{
     private StatusService statusService;
 
     @GetMapping("/status")
-    public List<StatusWithoutOrdersDTO> getAllStatuses(HttpServletRequest request){
+    public List<Status> getAllStatuses(HttpServletRequest request){
         return statusService.getAllStatuses(getLoggedUserId(request));
     }
 

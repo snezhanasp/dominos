@@ -13,7 +13,4 @@ public class Status {
     private long id;
     @Column
     private String name;
-
-    @OneToMany(mappedBy = "status")
-    private List<Order> orders;
 }
