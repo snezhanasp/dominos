@@ -5,7 +5,6 @@ import com.example.dominos.model.dto.item.CartItemWithQuantityDTO;
 import com.example.dominos.model.dto.item.ItemWithSpecificationAndQuantityDTO;
 import com.example.dominos.model.dto.ordered_item.OrderItemDTO;
 import com.example.dominos.model.dto.ordered_item.OrderItemWithSpecificationDTO;
-import com.example.dominos.model.dto.pizza_specification.PizzaSpecificationDTO;
 import com.example.dominos.model.entities.Item;
 import com.example.dominos.model.entities.PizzaSpecification;
 import com.example.dominos.model.exceptions.BadRequestException;
@@ -41,7 +40,7 @@ public class CartService extends AbstractService{
 
         if(item.getCategory().getName().equals(PIZZA)) {
             PizzaSpecification specification = getPizzaSpecificationBySizeIdAndDoughId(dto.getItem().getSizeId(), dto.getItem().getDoughId());
-            orderItem.setPizzaSpecification(modelMapper.map(specification, PizzaSpecificationDTO.class));
+            orderItem.setPizzaSpecification(specification);
         }
 
         double price = calculatePrice(orderItem, item);
@@ -97,7 +96,7 @@ public class CartService extends AbstractService{
         return price;
     }
 
-    protected double calculatePizzaSpecificationPrice(PizzaSpecificationDTO specification) {
+    protected double calculatePizzaSpecificationPrice(PizzaSpecification specification) {
          double price = 0;
          price += specification.getDoughType().getPrice();
          price += specification.getSize().getPrice();

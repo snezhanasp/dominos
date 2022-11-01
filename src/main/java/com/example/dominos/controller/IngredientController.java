@@ -1,6 +1,6 @@
 package com.example.dominos.controller;
 
-import com.example.dominos.model.dto.ingredient.IngredientWithoutItemsAndTypeDTO;
+import com.example.dominos.model.dto.ingredient.IngredientWithoutTypeDTO;
 import com.example.dominos.model.dto.ingredient_types.IngredientTypeResponseDTO;
 import com.example.dominos.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class IngredientController extends AbstractController{
     }
 
     @GetMapping("/menu/items/{id}/ingredients")
-    public List<IngredientWithoutItemsAndTypeDTO> getItemIngredients(@PathVariable long id){
+    public List<IngredientWithoutTypeDTO> getItemIngredients(@PathVariable long id){
         return ingredientService.getItemIngredients(id);
     }
 }

@@ -1,9 +1,9 @@
 package com.example.dominos.model.dto.order;
 
-import com.example.dominos.model.dto.PaymentMethodWithoutOrdersDTO;
 import com.example.dominos.model.dto.address.AddressWithoutUserDTO;
 
 import com.example.dominos.model.dto.item.CartItemWithQuantityDTO;
+import com.example.dominos.model.entities.PaymentMethod;
 import com.example.dominos.model.entities.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +22,6 @@ public class OrderResponseDTO {
     private LocalDateTime orderedAt;
     private AddressWithoutUserDTO address;
     private Status status;
-    private PaymentMethodWithoutOrdersDTO paymentMethod;
+    private PaymentMethod paymentMethod;
     private Set<CartItemWithQuantityDTO> items;
 }

@@ -27,6 +27,4 @@ public class Ingredient {
     @ManyToMany(mappedBy = "ingredients")
     private List<Item> items;
 
-    @ManyToMany(mappedBy = "ingredients")
-    private List<OrderedItem> orderedItems;
 }

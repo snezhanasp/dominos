@@ -7,8 +7,6 @@ import com.example.dominos.model.dto.item.PizzaInfoDTO;
 import com.example.dominos.model.entities.*;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
-import com.example.dominos.model.dto.pizza_specification.DoughDTO;
-import com.example.dominos.model.dto.pizza_specification.SizeDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -83,15 +81,13 @@ public class FavouritesService extends AbstractService{
         for (FavouriteItemName favourite : favourites) {
 
             PizzaInfoDTO dto = modelMapper.map(favourite,PizzaInfoDTO.class);
-            SizeDTO size = modelMapper.map(favourite.getOrderedItem().getPizzaSpecification().getSize(), SizeDTO.class);
-            DoughDTO dough = modelMapper.map(favourite.getOrderedItem().getPizzaSpecification().getDoughType(), DoughDTO.class);
             CategoryWithoutItemsDTO category = modelMapper.map(favourite.getOrderedItem().getItem().getCategory(),CategoryWithoutItemsDTO.class);
 
             dto.setPrice(checkPrice(favourite.getOrderedItem()));
             dto.setName(favourite.getName());
             dto.setCategory(category);
-            dto.setDoughType(dough);
-            dto.setSize(size);
+            dto.setDoughType(favourite.getOrderedItem().getPizzaSpecification().getDoughType());
+            dto.setSize(favourite.getOrderedItem().getPizzaSpecification().getSize());
             dto.setId(favourite.getOrderedItem().getId());
             dtos.add(dto);
         }

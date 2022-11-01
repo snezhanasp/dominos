@@ -1,9 +1,8 @@
 package com.example.dominos.model.dto.item;
 
 import com.example.dominos.model.dto.category.CategoryWithoutItemsDTO;
-import com.example.dominos.model.dto.ingredient.IngredientWithoutItemsAndTypeDTO;
-import com.example.dominos.model.dto.pizza_specification.DoughDTO;
-import com.example.dominos.model.dto.pizza_specification.SizeDTO;
+import com.example.dominos.model.dto.ingredient.IngredientWithoutTypeDTO;
+import com.example.dominos.model.entities.PizzaSpecification;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +18,7 @@ public class PizzaInfoDTO {
     private String name;
     private double price;
     private CategoryWithoutItemsDTO category;
-    private DoughDTO doughType;
-    private SizeDTO size;
-    private List<IngredientWithoutItemsAndTypeDTO> ingredients;
+    private PizzaSpecification.DoughType doughType;
+    private PizzaSpecification.Size size;
+    private List<IngredientWithoutTypeDTO> ingredients;
 }

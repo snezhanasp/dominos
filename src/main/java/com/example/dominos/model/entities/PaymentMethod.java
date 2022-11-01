@@ -12,7 +12,4 @@ public class PaymentMethod {
     private long id;
     @Column
     private String name;
-
-    @OneToMany(mappedBy = "payment")
-    private List<Order> orders;
 }

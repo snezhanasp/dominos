@@ -1,7 +1,7 @@
 package com.example.dominos.model.dto.ordered_item;
 
-import com.example.dominos.model.dto.ingredient.IngredientWithoutItemsAndTypeDTO;
-import com.example.dominos.model.dto.pizza_specification.PizzaSpecificationDTO;
+import com.example.dominos.model.dto.ingredient.IngredientWithoutTypeDTO;
+import com.example.dominos.model.entities.PizzaSpecification;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 public class OrderItemDTO {
 
     private long itemId;
-    private PizzaSpecificationDTO pizzaSpecification;
-    private List<IngredientWithoutItemsAndTypeDTO> ingredients;
+    private PizzaSpecification pizzaSpecification;
+    private List<IngredientWithoutTypeDTO> ingredients;
     private double price;
 }

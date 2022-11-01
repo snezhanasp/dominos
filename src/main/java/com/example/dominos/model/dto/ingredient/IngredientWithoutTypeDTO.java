@@ -1,4 +1,4 @@
-package com.example.dominos.model.dto.pizza_specification;
+package com.example.dominos.model.dto.ingredient;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
-public class PizzaSpecificationDTO {
+public class IngredientWithoutTypeDTO {
     private long id;
-    private DoughDTO doughType;
-    private SizeDTO size;
+    private String name;
 }

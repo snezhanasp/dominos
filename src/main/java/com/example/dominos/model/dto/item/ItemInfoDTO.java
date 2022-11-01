@@ -1,7 +1,7 @@
 package com.example.dominos.model.dto.item;
 
 import com.example.dominos.model.dto.category.CategoryWithoutItemsDTO;
-import com.example.dominos.model.dto.ingredient.IngredientWithoutItemsAndTypeDTO;
+import com.example.dominos.model.dto.ingredient.IngredientWithoutTypeDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,5 +18,5 @@ public class ItemInfoDTO {
     private double price;
     private CategoryWithoutItemsDTO category;
     private String pictureURL;
-    private List<IngredientWithoutItemsAndTypeDTO> ingredients;
+    private List<IngredientWithoutTypeDTO> ingredients;
 }
