@@ -17,7 +17,6 @@ public class UserController extends AbstractController{
 
     @PostMapping("/auth")
     public UserWithoutPassDTO login(@RequestBody LoginDTO loginDto, HttpServletRequest request){
-        //TODO check if already logged
 
         UserWithoutPassDTO result = userService.login(loginDto);
         if (result != null){

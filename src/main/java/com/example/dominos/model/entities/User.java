@@ -30,7 +30,6 @@ public class User {
     @Column
     private boolean isStaff;
 
-    //todo make this sets?
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 

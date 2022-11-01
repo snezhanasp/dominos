@@ -5,6 +5,7 @@ import com.example.dominos.model.dto.category.CategoryWithoutItemsDTO;
 import com.example.dominos.model.dto.item.CreatePizzaDTO;
 import com.example.dominos.model.dto.item.PizzaInfoDTO;
 import com.example.dominos.model.entities.*;
+import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
 import com.example.dominos.model.dto.pizza_specification.DoughDTO;
 import com.example.dominos.model.dto.pizza_specification.SizeDTO;
@@ -16,6 +17,8 @@ import java.util.Set;
 
 @Service
 public class FavouritesService extends AbstractService{
+
+    private static final int MAKE_YOUR_OWN = 1;
     @Transactional
     public PizzaInfoDTO addNewPizza(CreatePizzaDTO dto, long uid) {
         User user = getUserById(uid);
@@ -44,8 +47,13 @@ public class FavouritesService extends AbstractService{
     }
 
     private OrderedItem createItem(CreatePizzaDTO dto) {
+        long itemId = dto.getItemId();
+        if (itemId != MAKE_YOUR_OWN){
+            throw new BadRequestException("Wrong item!");
+        }
+
         OrderedItem orderedItem = new OrderedItem();
-        orderedItem.setItem(getItemById(dto.getItemId()));
+        orderedItem.setItem(getItemById(itemId));
 
         PizzaSpecification specification = getPizzaSpecificationBySizeIdAndDoughId(dto.getSize().getId(), dto.getDoughType().getId());
         orderedItem.setPizzaSpecification(specification);

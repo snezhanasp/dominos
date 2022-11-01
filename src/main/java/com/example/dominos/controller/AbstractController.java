@@ -47,7 +47,6 @@ public abstract class AbstractController {
 
     private ErrorDTO buildErrorInfo(Exception e, HttpStatus httpStatus) {
         e.printStackTrace();
-        //TODO add to log file - log4j
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setMessage(e.getMessage());
         errorDTO.setStatus(httpStatus.value());

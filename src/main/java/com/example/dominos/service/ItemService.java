@@ -7,6 +7,7 @@ import com.example.dominos.model.entities.Ingredient;
 import com.example.dominos.model.entities.Item;
 import com.example.dominos.model.exceptions.BadRequestException;
 import com.example.dominos.model.exceptions.NotFoundException;
+import com.example.dominos.model.exceptions.UnauthorizedException;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,8 +49,12 @@ public class ItemService extends AbstractService{
 
     }
 
-    public String uploadItemImage(long id, MultipartFile image) {
-        Item item = getItemById(id);
+    public String uploadItemImage(long iid, MultipartFile image, long uid) {
+        //check if user is staff
+        if (!getUserById(uid).isStaff()){
+            throw new UnauthorizedException("You do not have permission!");
+        }
+        Item item = getItemById(iid);
         String extension = FilenameUtils.getExtension(image.getOriginalFilename());
         String name = "uploads" + File.separator + System.nanoTime() + "." + extension;
 

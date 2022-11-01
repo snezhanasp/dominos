@@ -24,7 +24,6 @@ public class Ingredient {
     @JoinColumn(name = "type_id")
     private IngredientType ingredientType;
 
-    //todo set
     @ManyToMany(mappedBy = "ingredients")
     private List<Item> items;
 
